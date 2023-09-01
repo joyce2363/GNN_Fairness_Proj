@@ -36,7 +36,7 @@ def build_relationship(x, thresh=0.25):
     idx_map = np.array(idx_map)
 
     return idx_map
-def load_nba_parameters_fairGNN(dataset = "nba", sens_attr = "country",predict_attr = "SALARY", path = "dataset/", label_number=100,sens_number=50,seed=20,test_idx=True): 
+def load_nba_parameters_fairGNN(dataset = "nba", sens_attr = "country",predict_attr = "SALARY", path = "dataset/nba/", label_number=100,sens_number=50,seed=20,test_idx=True): 
     """Load data"""
     print('Loading {} dataset from {}'.format(dataset,path))
 

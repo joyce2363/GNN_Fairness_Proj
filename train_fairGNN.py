@@ -14,7 +14,7 @@ from src.models.FairGNN import FairGNN
 # Training settings
 parser = argparse.ArgumentParser()
 # Newly Added
-parser.add_argument('--paper', type=str, default='fairGNN', choices=['fairGNN', 'BIND'])
+# parser.add_argument('--paper', type=str, default='fairGNN', choices=['fairGNN', 'BIND'])
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--fastmode', action='store_true', default=False,
@@ -86,7 +86,7 @@ if args.dataset == 'nba':
     label_number = 100
     sens_number = 50
     seed = 20
-    path = "dataset/"
+    path = "dataset/nba/"
     test_idx = True
 print(dataset)
 

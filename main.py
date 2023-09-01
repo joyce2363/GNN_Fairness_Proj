@@ -4,21 +4,18 @@ from train_fairGNN import call_fairGNN
 from b_training1 import call_BIND_training1
 import torch
 
-# Training settings
-parser = argparse.ArgumentParser()
-parser.add_argument('--paper', type=str, choices=('fairGNN, BIND'), default='BIND')
-parser.add_argument('--dataset', type=str, default='nba', choices=['pokec_z','pokec_n','nba', 'bail'])
-parser.add_argument('--no-cuda', action='store_true', default=False,
-                    help='Disables CUDA training.')
+def main(args):
+    if args.model == 'fairGNN': 
+        call_fairGNN()
+    elif args.model == 'BIND': 
+        print("END")
+        call_BIND_training1() 
 
-# parser.add_argument("--size", choices=["S", "M", "L", "XL"], default="M")
-# python size.py --size S
-
-args = parser.parse_known_args()[0]
-args.cuda = not args.no_cuda and torch.cuda.is_available()
-print(args)
-print('PAPER CALLED: ', args.paper)
-if args.paper == 'fairGNN': 
-    call_fairGNN()
-elif args.paper == 'BIND': 
-    call_BIND_training1() 
+if __name__ == '__main__':
+    print('entered MAIN')
+    # Training settings
+    parser = argparse.ArgumentParser()
+    # the only think you had to do is replace the fault with the model you want to run
+    parser.add_argument('--model',type=str,default='fairGNN',help='Model')
+    args = parser.parse_args()
+    main(args)

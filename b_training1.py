@@ -59,14 +59,20 @@ def call_BIND_training1():
         norm_features[:, 0] = features[:, 0]
         features = feature_norm(features)
 
-    # print("adj: ", adj)
     edge_index = convert.from_scipy_sparse_matrix(adj)[0]
-    # print("edge_index_b_training: ", edge_index)
     # nclass=labels.unique().shape[0]-1 # use this for the bail data set but nclass=1 for the nba dataset
     model = GCN(nfeat=features.shape[1], nhid=args.hidden, nclass=1, dropout=args.dropout)
     # model = FairGNN(nfeat = features.shape[1], args = args)
-
     optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+
+    if args.cuda:
+        model.cuda()
+        features = features.cuda()
+        edge_index = edge_index.cuda()
+        labels = labels.cuda()
+        idx_train = idx_train.cuda()
+        idx_val = idx_val.cuda()
+        idx_test = idx_test.cuda()
 
     def accuracy_new(output, labels):
         correct = output.eq(labels).double()
@@ -87,19 +93,7 @@ def call_BIND_training1():
         model.train()
         optimizer.zero_grad()
         output = model(features, edge_index)
-        # print("OUTPUT: ", output[:1])
-        # print("idx_train: ", idx_train[:2])
-        # print("output[idx_train]: ", output[idx_train][:2])
-        # print("output size: ", output[idx_train].size())
-        # print("what is the output: ", output)
-        # print("input size: ", labels[idx_train].size())
-        # print("this is what the output is: ", output)
-        # # something is wrong with the input
-        # print("len of input: ", labels.unsqueeze(1).float().size())
-        # print("this is what the input is: ", labels)
-
         loss_train = F.binary_cross_entropy_with_logits(output[idx_train], labels[idx_train].unsqueeze(1).float())
-
         preds = (output.squeeze() > 0).type_as(labels)
         acc_train = accuracy_new(preds[idx_train], labels[idx_train])
         loss_train.backward()
@@ -161,6 +155,7 @@ def call_BIND_training1():
     model = torch.load('gcn_' + dataset_name + '.pth')
     tst()
 
+##### check
 
 
 
