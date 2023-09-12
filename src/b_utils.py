@@ -106,8 +106,8 @@ def load_nba_parameters_fairGNN(dataset = "nba", sens_attr = "country",predict_a
     
 
     # random.shuffle(sens_idx)
-
-    return adj, features, labels, idx_train, idx_val, idx_test, sens
+# try sens or sens.to(torch.device('cuda'))
+    return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 def load_nba_try(dataset, sens_attr="country", predict_attr="SALARY", path="dataset/", label_number=1000):
     print('Loading {} dataset from {}'.format(dataset,path))
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
@@ -183,7 +183,7 @@ def load_nba_try(dataset, sens_attr="country", predict_attr="SALARY", path="data
     idx_val = torch.LongTensor(idx_val)
     idx_test = torch.LongTensor(idx_test)
 
-    return adj, features, labels, idx_train,idx_val, idx_test, sens
+    return adj, features, labels, idx_train,idx_val, idx_test, sens.to(torch.device('cuda'))
 
 
 def load_bail(dataset, sens_attr="WHITE", predict_attr="RECID", path="dataset/bail/", label_number=1000):
@@ -233,7 +233,7 @@ def load_bail(dataset, sens_attr="WHITE", predict_attr="RECID", path="dataset/ba
     idx_val = torch.LongTensor(idx_val)
     idx_test = torch.LongTensor(idx_test)
 
-    return adj, features, labels, idx_train, idx_val, idx_test, sens
+    return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 
 
 def normalize(mx):

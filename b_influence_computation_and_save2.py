@@ -131,7 +131,7 @@ for i in tqdm(range(idx_train_vanilla.shape[0])):
 print("Pre-processing completed.")
 
 time1 = time.time()
-h_estimate_cost = s_test_graph_cost(edge_index, features_vanilla, idx_train_vanilla, idx_test_vanilla, labels_vanilla, sens_vanilla, model, gpu=-1)
+h_estimate_cost = s_test_graph_cost(edge_index, features_vanilla, idx_train_vanilla, idx_test_vanilla, labels_vanilla, sens_vanilla, model, gpu=0)
 gradients_list = grad_z_graph(edge_index, features_vanilla, idx_train_vanilla, labels_vanilla, model, gpu=0)
 influence, harmful, helpful, harmful_idx, helpful_idx = cal_influence_graph(idx_train_vanilla, h_estimate_cost, gradients_list, gpu=0)
 non_iid_influence = []
