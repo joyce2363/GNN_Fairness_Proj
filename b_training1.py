@@ -126,7 +126,7 @@ def tst():
     print("**********************************************")
 
     parity, equality = fair_metric(preds[idx_test].cpu().numpy(), labels[idx_test].cpu().numpy(),
-                                   sens[idx_test].numpy())
+                                   sens[idx_test].cpu().numpy())
 
     print("Test set results:",
           "loss= {:.4f}".format(loss_test.item()),
