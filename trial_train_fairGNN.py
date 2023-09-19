@@ -18,7 +18,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=2000,
+parser.add_argument('--epochs', type=int, default=100,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.001,
                     help='Initial learning rate.')
@@ -34,7 +34,7 @@ parser.add_argument('--beta', type=float, default=0.01,
                     help='The hyperparameter of beta')
 parser.add_argument('--model', type=str, default="GAT",
                     help='the type of model GCN/GAT')
-parser.add_argument('--dataset', type=str, default='pokec1_BIND',
+parser.add_argument('--dataset', type=str, default='pokec_n_fairGNN',
                     choices=['pokec_z_fairGNN','pokec_n_fairGNN','nba', 'pokec1_BIND, pokec2_BIND'])
 parser.add_argument('--num-hidden', type=int, default=64,
                     help='Number of hidden units of classifier.')
@@ -215,7 +215,7 @@ for epoch in range(args.epochs):
         print("=================================")
 
         print('Epoch: {:04d}'.format(epoch+1),
-            'cov: {:.4f}'.format(cov.item()),
+            'cov: {:.4f}'.format(cov.item()), #how sensitive attribute affects the predictions of y
             'cls: {:.4f}'.format(cls_loss.item()),
             'adv: {:.4f}'.format(adv_loss.item()),
             'acc_val: {:.4f}'.format(acc_val.item()),
