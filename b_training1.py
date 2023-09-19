@@ -40,120 +40,120 @@ np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 if args.cuda:
     torch.cuda.manual_seed(args.seed)
-def call_BIND_training1(): 
-    def feature_norm(features):
-        min_values = features.min(axis=0)[0]
-        max_values = features.max(axis=0)[0]
-        return 2*(features - min_values).div(max_values-min_values) - 1
+# def call_BIND_training1(): 
+def feature_norm(features):
+    min_values = features.min(axis=0)[0]
+    max_values = features.max(axis=0)[0]
+    return 2*(features - min_values).div(max_values-min_values) - 1
 
-    if dataset_name == 'nba':
-        # print("loading:", dataset_name)
-        adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN('nba')
-        # print("adj_b_training:   ", adj)
-        norm_features = feature_norm(features)
-        norm_features[:, 0] = features[:, 0]
-        features = feature_norm(features)
-    elif dataset_name == 'bail':
-        adj, features, labels, idx_train, idx_val, idx_test, sens = load_bail('bail')
-        norm_features = feature_norm(features)
-        norm_features[:, 0] = features[:, 0]
-        features = feature_norm(features)
+if dataset_name == 'nba':
+    print("loading:", dataset_name)
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN('nba')
+    # print("adj_b_training:   ", adj)
+    norm_features = feature_norm(features)
+    norm_features[:, 0] = features[:, 0]
+    features = feature_norm(features)
+elif dataset_name == 'bail':
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_bail('bail')
+    norm_features = feature_norm(features)
+    norm_features[:, 0] = features[:, 0]
+    features = feature_norm(features)
 
-    edge_index = convert.from_scipy_sparse_matrix(adj)[0]
-    # nclass=labels.unique().shape[0]-1 # use this for the bail data set but nclass=1 for the nba dataset
-    model = GCN(nfeat=features.shape[1], nhid=args.hidden, nclass=1, dropout=args.dropout)
-    # model = FairGNN(nfeat = features.shape[1], args = args)
-    optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+edge_index = convert.from_scipy_sparse_matrix(adj)[0]
+# nclass=labels.unique().shape[0]-1 # use this for the bail data set but nclass=1 for the nba dataset
+model = GCN(nfeat=features.shape[1], nhid=args.hidden, nclass=1, dropout=args.dropout)
+# model = FairGNN(nfeat = features.shape[1], args = args)
+optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-    if args.cuda:
-        model.cuda()
-        features = features.cuda()
-        edge_index = edge_index.cuda()
-        labels = labels.cuda()
-        idx_train = idx_train.cuda()
-        idx_val = idx_val.cuda()
-        idx_test = idx_test.cuda()
+if args.cuda:
+    model.cuda()
+    features = features.cuda()
+    edge_index = edge_index.cuda()
+    labels = labels.cuda()
+    idx_train = idx_train.cuda()
+    idx_val = idx_val.cuda()
+    idx_test = idx_test.cuda()
 
-    def accuracy_new(output, labels):
-        correct = output.eq(labels).double()
-        correct = correct.sum()
-        return correct / len(labels)
+def accuracy_new(output, labels):
+    correct = output.eq(labels).double()
+    correct = correct.sum()
+    return correct / len(labels)
 
-    def fair_metric(pred, labels, sens):
-        idx_s0 = sens==0
-        idx_s1 = sens==1
-        idx_s0_y1 = np.bitwise_and(idx_s0, labels==1)
-        idx_s1_y1 = np.bitwise_and(idx_s1, labels==1)
-        parity = abs(sum(pred[idx_s0])/sum(idx_s0)-sum(pred[idx_s1])/sum(idx_s1))
-        equality = abs(sum(pred[idx_s0_y1])/sum(idx_s0_y1)-sum(pred[idx_s1_y1])/sum(idx_s1_y1))
-        return parity.item(), equality.item()
+def fair_metric(pred, labels, sens):
+    idx_s0 = sens==0
+    idx_s1 = sens==1
+    idx_s0_y1 = np.bitwise_and(idx_s0, labels==1)
+    idx_s1_y1 = np.bitwise_and(idx_s1, labels==1)
+    parity = abs(sum(pred[idx_s0])/sum(idx_s0)-sum(pred[idx_s1])/sum(idx_s1))
+    equality = abs(sum(pred[idx_s0_y1])/sum(idx_s0_y1)-sum(pred[idx_s1_y1])/sum(idx_s1_y1))
+    return parity.item(), equality.item()
 
-    def train(epoch):
-        t = time.time()
-        model.train()
-        optimizer.zero_grad()
-        output = model(features, edge_index)
-        loss_train = F.binary_cross_entropy_with_logits(output[idx_train], labels[idx_train].unsqueeze(1).float())
-        preds = (output.squeeze() > 0).type_as(labels)
-        acc_train = accuracy_new(preds[idx_train], labels[idx_train])
-        loss_train.backward()
-        optimizer.step()
+def train(epoch):
+    t = time.time()
+    model.train()
+    optimizer.zero_grad()
+    output = model(features, edge_index)
+    loss_train = F.binary_cross_entropy_with_logits(output[idx_train], labels[idx_train].unsqueeze(1).float())
+    preds = (output.squeeze() > 0).type_as(labels)
+    acc_train = accuracy_new(preds[idx_train], labels[idx_train])
+    loss_train.backward()
+    optimizer.step()
 
-        if not args.fastmode:
-            model.eval()
-            output = model(features, edge_index)
-        loss_val = F.binary_cross_entropy_with_logits(output[idx_val], labels[idx_val].unsqueeze(1).float())
-        acc_val = accuracy_new(preds[idx_val], labels[idx_val])
-        return loss_val.item()
-
-    def tst():
+    if not args.fastmode:
         model.eval()
         output = model(features, edge_index)
-        preds = (output.squeeze() > 0).type_as(labels)
-        loss_test = F.binary_cross_entropy_with_logits(output[idx_test], labels[idx_test].unsqueeze(1).float())
-        acc_test = accuracy_new(preds[idx_test], labels[idx_test])
+    loss_val = F.binary_cross_entropy_with_logits(output[idx_val], labels[idx_val].unsqueeze(1).float())
+    acc_val = accuracy_new(preds[idx_val], labels[idx_val])
+    return loss_val.item()
 
-        print("*****************  Cost  ********************")
-        print("SP cost:")
-        idx_sens_test = sens[idx_test]
-        idx_output_test = output[idx_test]
-        print(wasserstein_distance(idx_output_test[idx_sens_test==0].squeeze().cpu().detach().numpy(), idx_output_test[idx_sens_test==1].squeeze().cpu().detach().numpy()))
+def tst():
+    model.eval()
+    output = model(features, edge_index)
+    preds = (output.squeeze() > 0).type_as(labels)
+    loss_test = F.binary_cross_entropy_with_logits(output[idx_test], labels[idx_test].unsqueeze(1).float())
+    acc_test = accuracy_new(preds[idx_test], labels[idx_test])
 
-        print("EO cost:")
-        idx_sens_test = sens[idx_test][labels[idx_test]==1]
-        idx_output_test = output[idx_test][labels[idx_test]==1]
-        print(wasserstein_distance(idx_output_test[idx_sens_test==0].squeeze().cpu().detach().numpy(), idx_output_test[idx_sens_test==1].squeeze().cpu().detach().numpy()))
-        print("**********************************************")
+    print("*****************  Cost  ********************")
+    print("SP cost:")
+    idx_sens_test = sens[idx_test]
+    idx_output_test = output[idx_test]
+    print(wasserstein_distance(idx_output_test[idx_sens_test==0].squeeze().cpu().detach().numpy(), idx_output_test[idx_sens_test==1].squeeze().cpu().detach().numpy()))
 
-        parity, equality = fair_metric(preds[idx_test].cpu().numpy(), labels[idx_test].cpu().numpy(),
-                                       sens[idx_test].numpy())
+    print("EO cost:")
+    idx_sens_test = sens[idx_test][labels[idx_test]==1]
+    idx_output_test = output[idx_test][labels[idx_test]==1]
+    print(wasserstein_distance(idx_output_test[idx_sens_test==0].squeeze().cpu().detach().numpy(), idx_output_test[idx_sens_test==1].squeeze().cpu().detach().numpy()))
+    print("**********************************************")
 
-        print("Test set results:",
-              "loss= {:.4f}".format(loss_test.item()),
-              "accuracy= {:.4f}".format(acc_test.item()))
+    parity, equality = fair_metric(preds[idx_test].cpu().numpy(), labels[idx_test].cpu().numpy(),
+                                   sens[idx_test].numpy())
 
-        print("Statistical Parity:  " + str(parity))
-        print("Equality:  " + str(equality))
+    print("Test set results:",
+          "loss= {:.4f}".format(loss_test.item()),
+          "accuracy= {:.4f}".format(acc_test.item()))
+
+    print("Statistical Parity:  " + str(parity))
+    print("Equality:  " + str(equality))
 
 
-    t_total = time.time()
-    final_epochs = 0
-    loss_val_global = 1e10
+t_total = time.time()
+final_epochs = 0
+loss_val_global = 1e10
 
-    starting = time.time()
-    for epoch in tqdm(range(args.epochs)):
-        loss_mid = train(epoch)
-        if loss_mid < loss_val_global:
-            loss_val_global = loss_mid
-            torch.save(model, 'gcn_' + dataset_name + '.pth')
-            final_epochs = epoch
+starting = time.time()
+for epoch in tqdm(range(args.epochs)):
+    loss_mid = train(epoch)
+    if loss_mid < loss_val_global:
+        loss_val_global = loss_mid
+        torch.save(model, 'gcn_' + dataset_name + '.pth')
+        final_epochs = epoch
 
-    torch.save(model, 'gcn_' + dataset_name + '.pth')
+torch.save(model, 'gcn_' + dataset_name + '.pth')
 
-    ending = time.time()
-    print("Time:", ending - starting, "s")
-    model = torch.load('gcn_' + dataset_name + '.pth')
-    tst()
+ending = time.time()
+print("Time:", ending - starting, "s")
+model = torch.load('gcn_' + dataset_name + '.pth')
+tst()
 
 ##### check
 
