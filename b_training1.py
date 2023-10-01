@@ -74,7 +74,7 @@ elif dataset_name == 'fair_pokec1':
     sens_number = args.sens_number
     seed = 20
     path="/home/joyce/dataset/pokec_fairGNN"
-     # /home/joyce/dataset/pokec_fairGNN
+     # /home/joyce/dataset/pokec_fairGNN (this is the path for running in docker container)
     test_idx=False
     adj, features, labels, idx_train, idx_val, idx_test,sens = load_pokec(dataset,
                                                                                     sens_attr,
@@ -142,7 +142,7 @@ def tst():
 
     print("*****************  Cost  ********************")
     print("SP cost:")
-    idx_sens_test = sens[idx_test]
+    idx_sens_test = sens[idx_test].cpu().numpy()
     idx_output_test = output[idx_test]
     print(wasserstein_distance(idx_output_test[idx_sens_test==0].squeeze().cpu().detach().numpy(), idx_output_test[idx_sens_test==1].squeeze().cpu().detach().numpy()))
 
