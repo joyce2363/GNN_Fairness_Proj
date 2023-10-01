@@ -7,7 +7,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
-from src.b_utils import load_nba_try, load_bail, load_nba_parameters_fairGNN
+from src.b_utils import load_nba_try, load_bail, load_nba_parameters_fairGNN, load_pokec_renewed, load_pokec
 from src.gcn import GCN
 from scipy.stats import wasserstein_distance
 from tqdm import tqdm
@@ -20,7 +20,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
-parser.add_argument('--dataset', type=str, default="pokec1", help='One dataset from income, bail, pokec1, and pokec2.')
+parser.add_argument('--dataset', type=str, default="fair_pokec1", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2.')
 parser.add_argument('--seed', type=int, default=10, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=1000,
                     help='Number of epochs to train.')
@@ -32,6 +32,10 @@ parser.add_argument('--hidden', type=int, default=62,
                     help='Number of hidden units.')
 parser.add_argument('--dropout', type=float, default=0.5,
                     help='Dropout rate (1 - keep probability).')
+parser.add_argument('--sens_number', type=int, default=200,
+                    help="the number of sensitive attributes")
+parser.add_argument('--label_number', type=int, default=500,
+                    help="the number of labels")
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -45,9 +49,9 @@ def feature_norm(features):
     min_values = features.min(axis=0)[0]
     max_values = features.max(axis=0)[0]
     return 2*(features - min_values).div(max_values-min_values) - 1
+print("loading: ", dataset_name)
 
 if dataset_name == 'nba':
-    print("loading:", dataset_name)
     adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN('nba')
     # print("adj_b_training:   ", adj)
     norm_features = feature_norm(features)
@@ -58,8 +62,30 @@ elif dataset_name == 'bail':
     norm_features = feature_norm(features)
     norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
+elif dataset_name == 'pokec1':
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(1)
+elif dataset_name == 'pokec2':
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(2)
+elif dataset_name == 'fair_pokec1': 
+    dataset = 'region_job'
+    sens_attr = "region"
+    predict_attr = "I_am_working_in_field"
+    label_number = args.label_number
+    sens_number = args.sens_number
+    seed = 20
+    path="/Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN/"
+    test_idx=False
+    adj, features, labels, idx_train, idx_val, idx_test,sens = load_pokec(dataset,
+                                                                                    sens_attr,
+                                                                                    predict_attr,
+                                                                                    path=path,
+                                                                                    label_number=label_number,
+                                                                                    sens_number=sens_number,
+                                                                                    seed=seed,test_idx=test_idx)
+
 
 edge_index = convert.from_scipy_sparse_matrix(adj)[0]
+print('edge_index: ', edge_index)
 # nclass=labels.unique().shape[0]-1 # use this for the bail data set but nclass=1 for the nba dataset
 model = GCN(nfeat=features.shape[1], nhid=args.hidden, nclass=1, dropout=args.dropout)
 # model = FairGNN(nfeat = features.shape[1], args = args)
