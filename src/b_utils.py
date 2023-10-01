@@ -79,7 +79,7 @@ def load_pokec_renewed(dataset, label_number=1000):  # 1000
 
     return adj, features, labels, idx_train, idx_val, idx_test, sens
 
-def load_pokec(dataset,sens_attr,predict_attr, path="./Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN/", label_number=1000,sens_number=500,seed=19,test_idx=False):
+def load_pokec(dataset,sens_attr,predict_attr, path="blah/combinedPapers/dataset/pokec_fairGNN/", label_number=1000,sens_number=500,seed=19,test_idx=False):
     """Load data"""
     # /Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN/region_job.csv
     print('Loading {} dataset from {}'.format(dataset,path))

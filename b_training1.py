@@ -73,7 +73,7 @@ elif dataset_name == 'fair_pokec1':
     label_number = args.label_number
     sens_number = args.sens_number
     seed = 20
-    path="/Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN/"
+    path="../combinedPapers/dataset/pokec_fairGNN/"
     test_idx=False
     adj, features, labels, idx_train, idx_val, idx_test,sens = load_pokec(dataset,
                                                                                     sens_attr,
