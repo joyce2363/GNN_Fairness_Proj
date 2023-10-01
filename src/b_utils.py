@@ -88,7 +88,9 @@ def load_pokec_renewed(dataset, label_number=1000):  # 1000
     idx_test = torch.LongTensor(idx_test)
 
     return adj, features, labels, idx_train, idx_val, idx_test, sens
-def load_income(dataset, sens_attr="race", predict_attr="income", path="../data/income/", label_number=1000):  # 1000
+def load_income(dataset, sens_attr="race", predict_attr="income", path="/Users/beep/Desktop/combinedPapers/dataset/income/", label_number=1000):  # 1000
+    # /Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN (path when on server)
+    # ../data/income/ (path when not on server)
     print('Loading {} dataset from {}'.format(dataset, path))
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
     header = list(idx_features_labels.columns)
@@ -138,7 +140,7 @@ def load_income(dataset, sens_attr="race", predict_attr="income", path="../data/
 
     return adj, features, labels, idx_train, idx_val, idx_test, sens
 
-def load_pokec(dataset,sens_attr,predict_attr, path="blah/combinedPapers/dataset/pokec_fairGNN/", label_number=1000,sens_number=500,seed=19,test_idx=False):
+def load_pokec(dataset,sens_attr,predict_attr, path="...", label_number=1000,sens_number=500,seed=19,test_idx=False):
     """Load data"""
     # /Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN/region_job.csv
     print('Loading {} dataset from {}'.format(dataset,path))
