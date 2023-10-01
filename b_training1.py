@@ -142,7 +142,8 @@ def tst():
 
     print("*****************  Cost  ********************")
     print("SP cost:")
-    idx_sens_test = sens[idx_test].cpu().numpy()
+    idx_sens_test = sens[idx_test]
+    idx_sens_test = idx_sens_test.to(torch.device('cuda'))
     idx_output_test = output[idx_test]
     print(wasserstein_distance(idx_output_test[idx_sens_test==0].squeeze().cpu().detach().numpy(), idx_output_test[idx_sens_test==1].squeeze().cpu().detach().numpy()))
 
