@@ -50,10 +50,10 @@ def load_pokec_renewed(dataset, label_number=1000):  # 1000
         labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_labels.npy')
         sens = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_BIND_sens.npy')
     else:
-        edges = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_edges.npy')
-        features = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_features.npy')
-        labels = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_labels.npy')
-        sens = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_sens.npy')
+        # edges = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_edges.npy')
+        # features = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_features.npy')
+        # labels = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_labels.npy')
+        # sens = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_sens.npy')
 
         edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_edges.npy')
         features = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_features.npy')
