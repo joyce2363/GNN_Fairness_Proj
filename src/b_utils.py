@@ -38,17 +38,27 @@ def build_relationship(x, thresh=0.25):
     return idx_map
 
 def load_pokec_renewed(dataset, label_number=1000):  # 1000
-
+# /home/joyce/dataset/pokec_fairGNN path for in docker 
     if dataset == 1:
-        edges = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_edges.npy')
-        features = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_features.npy')
-        labels = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_labels.npy')
-        sens = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_BIND_sens.npy')
+        # edges = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_edges.npy')
+        # features = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_features.npy')
+        # labels = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_labels.npy')
+        # sens = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_BIND_sens.npy')
+
+        edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_edges.npy')
+        features = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_features.npy')
+        labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_labels.npy')
+        sens = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_BIND_sens.npy')
     else:
         edges = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_edges.npy')
         features = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_features.npy')
         labels = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_labels.npy')
         sens = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_sens.npy')
+
+        edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_edges.npy')
+        features = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_features.npy')
+        labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_labels.npy')
+        sens = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_sens.npy')
 
     adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
                         shape=(labels.shape[0], labels.shape[0]),
