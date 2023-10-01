@@ -133,7 +133,8 @@ def load_income(dataset, sens_attr="race", predict_attr="income", path="/home/jo
                         label_idx_1[int(0.5 * len(label_idx_1)):int(0.75 * len(label_idx_1))])
     idx_test = np.append(label_idx_0[int(0.75 * len(label_idx_0)):], label_idx_1[int(0.75 * len(label_idx_1)):])
 
-    sens = idx_features_labels[sens_attr].values.astype(int)
+    # sens = idx_features_labels[sens_attr].values.astype(int)
+    sens = idx_features_labels[sens_attr].values
     sens = torch.FloatTensor(sens)
     idx_train = torch.LongTensor(idx_train)
     idx_val = torch.LongTensor(idx_val)
