@@ -88,7 +88,7 @@ def load_pokec_renewed(dataset, label_number=1000):  # 1000
     idx_test = torch.LongTensor(idx_test)
 
     return adj, features, labels, idx_train, idx_val, idx_test, sens
-def load_income(dataset, sens_attr="race", predict_attr="income", path="/home/joyce/dataset/pokec_fairGNN/income/", label_number=1000):  # 1000
+def load_income(dataset, sens_attr="race", predict_attr="income", path="/home/joyce/dataset/income/", label_number=1000):  # 1000
     # /Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN (path when not on server?)
     # /home/joyce/dataset/pokec_fairGNN (path for on docker container)
     # ../data/income/ (path when not on server)
