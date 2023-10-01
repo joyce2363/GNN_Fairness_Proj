@@ -57,6 +57,11 @@ if dataset_name == 'nba':
     norm_features = feature_norm(features)
     norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
+elif dataset_name == 'income':
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_income('income')
+    norm_features = feature_norm(features)
+    norm_features[:, 8] = features[:, 8]
+    features = feature_norm(features)
 elif dataset_name == 'bail':
     adj, features, labels, idx_train, idx_val, idx_test, sens = load_bail('bail')
     norm_features = feature_norm(features)
