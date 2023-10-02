@@ -13,7 +13,7 @@ import argparse
 from scipy.spatial import distance_matrix
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--seed', type=int, default=2, help='Random seed.')
+parser.add_argument('--seed', type=int, default=1, help='Random seed.')
 args = parser.parse_args()
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)

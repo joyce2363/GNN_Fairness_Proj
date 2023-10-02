@@ -20,8 +20,8 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
-parser.add_argument('--dataset', type=str, default="fair_pokec2", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
-parser.add_argument('--seed', type=int, default=2, help='Random seed.')
+parser.add_argument('--dataset', type=str, default="fair_pokec1", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
+parser.add_argument('--seed', type=int, default=1, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=1000,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.001,
@@ -78,7 +78,7 @@ elif dataset_name == 'fair_pokec1':
     label_number = args.label_number
     sens_number = args.sens_number
     seed = args.seed
-    path="/Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN"
+    path="/home/joyce/dataset/pokec_fairGNN"
      # /home/joyce/dataset/pokec_fairGNN (this is the path for running in docker container)
     test_idx=False
     adj, features, labels, idx_train, idx_val, idx_test,sens = load_pokec(dataset,
