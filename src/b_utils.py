@@ -15,7 +15,6 @@ from scipy.spatial import distance_matrix
 parser = argparse.ArgumentParser()
 parser.add_argument('--seed', type=int, default=4, help='Random seed.')
 args = parser.parse_args()
-args.cuda = not args.no_cuda and torch.cuda.is_available()
 dataset_name = args.dataset
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
