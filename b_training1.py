@@ -20,7 +20,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
-parser.add_argument('--dataset', type=str, default="bail", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2.')
+parser.add_argument('--dataset', type=str, default="fair_pokec2", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
 parser.add_argument('--seed', type=int, default=10, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=1000,
                     help='Number of epochs to train.')
@@ -72,6 +72,23 @@ elif dataset_name == 'pokec1':
 elif dataset_name == 'pokec2':
     adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(2)
 elif dataset_name == 'fair_pokec1': 
+    dataset = 'region_job'
+    sens_attr = "region"
+    predict_attr = "I_am_working_in_field"
+    label_number = args.label_number
+    sens_number = args.sens_number
+    seed = 20
+    path="/Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN"
+     # /home/joyce/dataset/pokec_fairGNN (this is the path for running in docker container)
+    test_idx=False
+    adj, features, labels, idx_train, idx_val, idx_test,sens = load_pokec(dataset,
+                                                                                    sens_attr,
+                                                                                    predict_attr,
+                                                                                    path=path,
+                                                                                    label_number=label_number,
+                                                                                    sens_number=sens_number,
+                                                                                    seed=seed,test_idx=test_idx)
+elif dataset_name == 'fair_pokec2': 
     dataset = 'region_job'
     sens_attr = "region"
     predict_attr = "I_am_working_in_field"
