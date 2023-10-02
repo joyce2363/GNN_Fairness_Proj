@@ -11,7 +11,7 @@ import scipy.sparse as sp
 from scipy.spatial import distance_matrix
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--seed', type=int, default=5, help='Random seed.')
+parser.add_argument('--seed', type=int, default=4, help='Random seed.')
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 dataset_name = args.dataset
@@ -37,7 +37,7 @@ def build_relationship(x, thresh=0.25):
         max_sim = np.sort(df_euclid[ind, :])[-2]
         neig_id = np.where(df_euclid[ind, :] > thresh * max_sim)[0]
         import random
-        random.seed(912)
+        random.seed(args.seed)
         random.shuffle(neig_id)
         for neig in neig_id:
             if neig != ind:
@@ -226,7 +226,7 @@ def load_pokec(dataset,sens_attr,predict_attr, path="...", label_number=1000,sen
     return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 
 
-def load_nba_parameters_fairGNN(dataset = "nba", sens_attr = "country",predict_attr = "SALARY", path = "dataset/nba/", label_number=100,sens_number=50,seed=10,test_idx=True): 
+def load_nba_parameters_fairGNN(dataset = "nba", sens_attr = "country",predict_attr = "SALARY", path = "dataset/nba/", label_number=100,sens_number=50,seed=args.seed,test_idx=True): 
     """Load data"""
     print('Loading {} dataset from {}'.format(dataset,path))
 
@@ -335,7 +335,7 @@ def load_nba_try(dataset, sens_attr="country", predict_attr="SALARY", path="data
     labels = torch.LongTensor(labels)
 
     import random
-    random.seed(10)
+    random.seed(args.seed)
     # label_idx_0 = np.where(labels == 0)[0]
     # label_idx_1 = np.where(labels == 1)[0]
     # random.shuffle(label_idx_0)
@@ -367,7 +367,7 @@ def load_nba_try(dataset, sens_attr="country", predict_attr="SALARY", path="data
     sens_idx = set(np.where(sens >= 0)[0])
     idx_test = np.asarray(list(sens_idx & set(idx_test)))
     sens = torch.FloatTensor(sens)
-    random.seed(10)
+    random.seed(args.seed)
 
 
     idx_train = torch.LongTensor(idx_train)
@@ -405,7 +405,7 @@ def load_bail(dataset, sens_attr="WHITE", predict_attr="RECID", path="dataset/ba
     labels = torch.LongTensor(labels)
 
     import random
-    random.seed(10)
+    random.seed(args.seed)
     label_idx_0 = np.where(labels == 0)[0]
     label_idx_1 = np.where(labels == 1)[0]
 
