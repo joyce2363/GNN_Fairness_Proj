@@ -89,7 +89,9 @@ elif dataset_name == 'fair_pokec1':
                                                                                     sens_number=sens_number,
                                                                                     seed=seed,test_idx=test_idx)
 elif dataset_name == 'fair_pokec2': 
-    dataset = 'region_job'
+    dataset = 'region_job_2'
+    print('dataset :', dataset)
+
     sens_attr = "region"
     predict_attr = "I_am_working_in_field"
     label_number = args.label_number
