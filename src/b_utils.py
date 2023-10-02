@@ -10,6 +10,15 @@ import pandas as pd
 import scipy.sparse as sp
 from scipy.spatial import distance_matrix
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--seed', type=int, default=5, help='Random seed.')
+args = parser.parse_args()
+args.cuda = not args.no_cuda and torch.cuda.is_available()
+dataset_name = args.dataset
+np.random.seed(args.seed)
+torch.manual_seed(args.seed)
+if args.cuda:
+    torch.cuda.manual_seed(args.seed)
 
 def encode_onehot(labels):
     classes = set(labels)
@@ -67,7 +76,7 @@ def load_pokec_renewed(dataset, label_number=1000):  # 1000
     adj = adj + sp.eye(adj.shape[0])
 
     import random
-    random.seed(20)
+    random.seed(args.seed)
     label_idx_0 = np.where(labels == 0)[0]
     label_idx_1 = np.where(labels == 1)[0]
 
@@ -121,7 +130,7 @@ def load_income(dataset, sens_attr="race", predict_attr="income", path="/home/jo
     labels = torch.LongTensor(labels)
 
     import random
-    random.seed(20)
+    random.seed(args.seed)
     label_idx_0 = np.where(labels == 0)[0]
     label_idx_1 = np.where(labels == 1)[0]
 
@@ -143,7 +152,7 @@ def load_income(dataset, sens_attr="race", predict_attr="income", path="/home/jo
 
     return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 
-def load_pokec(dataset,sens_attr,predict_attr, path="...", label_number=1000,sens_number=500,seed=19,test_idx=False):
+def load_pokec(dataset,sens_attr,predict_attr, path="...", label_number=1000,sens_number=500,seed=args.seed,test_idx=False):
     """Load data"""
     # /Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN/region_job.csv
     print('Loading {} dataset from {}'.format(dataset,path))
@@ -217,7 +226,7 @@ def load_pokec(dataset,sens_attr,predict_attr, path="...", label_number=1000,sen
     return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 
 
-def load_nba_parameters_fairGNN(dataset = "nba", sens_attr = "country",predict_attr = "SALARY", path = "dataset/nba/", label_number=100,sens_number=50,seed=20,test_idx=True): 
+def load_nba_parameters_fairGNN(dataset = "nba", sens_attr = "country",predict_attr = "SALARY", path = "dataset/nba/", label_number=100,sens_number=50,seed=10,test_idx=True): 
     """Load data"""
     print('Loading {} dataset from {}'.format(dataset,path))
 
@@ -326,7 +335,7 @@ def load_nba_try(dataset, sens_attr="country", predict_attr="SALARY", path="data
     labels = torch.LongTensor(labels)
 
     import random
-    random.seed(20)
+    random.seed(10)
     # label_idx_0 = np.where(labels == 0)[0]
     # label_idx_1 = np.where(labels == 1)[0]
     # random.shuffle(label_idx_0)
@@ -358,7 +367,7 @@ def load_nba_try(dataset, sens_attr="country", predict_attr="SALARY", path="data
     sens_idx = set(np.where(sens >= 0)[0])
     idx_test = np.asarray(list(sens_idx & set(idx_test)))
     sens = torch.FloatTensor(sens)
-    random.seed(20)
+    random.seed(10)
 
 
     idx_train = torch.LongTensor(idx_train)
@@ -396,7 +405,7 @@ def load_bail(dataset, sens_attr="WHITE", predict_attr="RECID", path="dataset/ba
     labels = torch.LongTensor(labels)
 
     import random
-    random.seed(20)
+    random.seed(10)
     label_idx_0 = np.where(labels == 0)[0]
     label_idx_1 = np.where(labels == 1)[0]
 
