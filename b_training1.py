@@ -95,7 +95,7 @@ elif dataset_name == 'fair_pokec2':
     label_number = args.label_number
     sens_number = args.sens_number
     seed = 20
-    path="/Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN"
+    path="/home/joyce/dataset/pokec_fairGNN"
      # /home/joyce/dataset/pokec_fairGNN (this is the path for running in docker container)
     test_idx=False
     adj, features, labels, idx_train, idx_val, idx_test,sens = load_pokec(dataset,
