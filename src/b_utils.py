@@ -88,7 +88,7 @@ def load_pokec_renewed(dataset, label_number=1000):  # 1000
     idx_test = torch.LongTensor(idx_test)
 
     return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
-    
+
 def load_income(dataset, sens_attr="race", predict_attr="income", path="/home/joyce/dataset/income/", label_number=1000):  # 1000
     # /Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN (path when not on server?)
     # /home/joyce/dataset/pokec_fairGNN (path for on docker container)
@@ -214,7 +214,7 @@ def load_pokec(dataset,sens_attr,predict_attr, path="...", label_number=1000,sen
 
     # random.shuffle(sens_idx)
 
-    return adj, features, labels, idx_train, idx_val, idx_test, sens
+    return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 
 
 def load_nba_parameters_fairGNN(dataset = "nba", sens_attr = "country",predict_attr = "SALARY", path = "dataset/nba/", label_number=100,sens_number=50,seed=20,test_idx=True): 
