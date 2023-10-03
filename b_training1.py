@@ -21,7 +21,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
 parser.add_argument('--dataset', type=str, default="bail", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
-parser.add_argument('--seed', type=int, default=5, help='Random seed.')
+parser.add_argument('--seed', type=int, default=4, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=1000,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.001,
