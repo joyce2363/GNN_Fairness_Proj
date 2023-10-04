@@ -92,30 +92,26 @@ def get_adj(_name):
     print('Reconstructing the adj of {} dataset...'.format(dataset))
 
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
-    print("idx_features_labels", idx_features_labels )
     header = list(idx_features_labels.columns)
     header.remove(predict_attr)
 
     if os.path.exists(f'{path}/{dataset}_edges.txt'):
-        edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
-        print('entered EDGES_UNORDERED: ', edges_unordered)
+        edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
+    else:
+        edges_unordered = build_relationship(idx_features_labels[header], thresh=0.6)
+        np.savetxt(f'{path}/{dataset}_edges.txt', edges_unordered)
 
     features = sp.csr_matrix(idx_features_labels[header], dtype=np.float32)
     labels = idx_features_labels[predict_attr].values
 
-    # idx = np.array(idx_features_labels["user_id"], dtype=int)
     idx = np.arange(features.shape[0])
     idx_map = {j: i for i, j in enumerate(idx)}
-
     edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
                      dtype=int).reshape(edges_unordered.shape)
-
-
     adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
                         shape=(labels.shape[0], labels.shape[0]),
                         dtype=np.float32)
     adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
-
     return adj
 
 def del_adj(harmful):
