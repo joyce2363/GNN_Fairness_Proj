@@ -20,7 +20,7 @@ warnings.filterwarnings('ignore')
 torch.backends.cudnn.benchmark = True
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default="income", help='dataset')
+parser.add_argument('--dataset', type=str, default="bail", help='dataset')
 parser.add_argument('--seed', type=int, default=1, help='Random seed.')
 args = parser.parse_args()
 
