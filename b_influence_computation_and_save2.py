@@ -134,8 +134,7 @@ elif dataset_name == 'nba':
     features_vanilla = norm_features
 elif dataset_name == 'income': 
     model = torch.load('gcn_' + dataset_name + '.pth')
-    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, 
-        idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_income('income')
+    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_income('income')
 elif dataset_name == 'pokec1':
     model = torch.load('gcn_' + dataset_name + '.pth')
     adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_pokec_renewed(1)
