@@ -19,10 +19,17 @@ warnings.filterwarnings('ignore')
 # ctypes.cdll.LoadLibrary('caffe2_nvrtc.dll')
 torch.backends.cudnn.benchmark = True
 
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default="bail", help='dataset')
 parser.add_argument('--seed', type=int, default=1, help='Random seed.')
+parser.add_argument('--no-cuda', action='store_true', default=False,
+                    help='Disables CUDA training.')
 args = parser.parse_args()
+args.cuda = not args.no_cuda and torch.cuda.is_available()
+
+if args.cuda:
+    torch.cuda.manual_seed(args.seed)
 
 dataset_name = args.dataset
 np.random.seed(args.seed)
@@ -85,6 +92,7 @@ def get_adj(_name):
     print('Reconstructing the adj of {} dataset...'.format(dataset))
 
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
+    print("idx_features_labels", idx_features_labels )
     header = list(idx_features_labels.columns)
     header.remove(predict_attr)
 
@@ -141,8 +149,6 @@ elif dataset_name == 'pokec1':
 elif dataset_name == 'pokec2':
     model = torch.load('gcn_' + dataset_name + '.pth')
     adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_pokec_renewed(2)
-
-
 
 edge_index = convert.from_scipy_sparse_matrix(adj_vanilla)[0]
 print("Pre-processing data...")
