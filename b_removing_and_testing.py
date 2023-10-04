@@ -23,7 +23,7 @@ from src.b_utils import load_bail, load_income, load_pokec_renewed
 import warnings
 warnings.filterwarnings('ignore')
 import ctypes
-ctypes.cdll.LoadLibrary('caffe2_nvrtc.dll')
+# ctypes.cdll.LoadLibrary('caffe2_nvrtc.dll')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--no-cuda', action='store_true', default=False,
