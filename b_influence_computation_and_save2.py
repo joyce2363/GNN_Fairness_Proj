@@ -20,8 +20,8 @@ warnings.filterwarnings('ignore')
 torch.backends.cudnn.benchmark = True
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default="nba", help='dataset')
-parser.add_argument('--seed', type=int, default=10, help='Random seed.')
+parser.add_argument('--dataset', type=str, default="income", help='dataset')
+parser.add_argument('--seed', type=int, default=1, help='Random seed.')
 args = parser.parse_args()
 
 dataset_name = args.dataset
@@ -58,9 +58,27 @@ def feature_norm(features):
     max_values = features.max(axis=0)[0]
     return 2*(features - min_values).div(max_values-min_values) - 1
 
-def get_adj(dataset_name):
-    if dataset_name == 'nba': 
-        predict_attr = "SALARY"
+def get_adj(_name):
+     predict_attr = "RECID"
+    if dataset_name == 'bail':
+        predict_attr="RECID"
+    elif dataset_name == 'income':
+        predict_attr = "income"
+    elif dataset_name = 'nba':
+        predict_attr == 'nba'
+    if dataset_name == 'pokec1' or dataset_name == 'pokec2':
+        if dataset_name == 'pokec1':
+            edges = np.load('../data/pokec_dataset/region_job_1_edges.npy')
+            labels = np.load('../data/pokec_dataset/region_job_1_labels.npy')
+        else:
+            edges = np.load('../data/pokec_dataset/region_job_2_2_edges.npy')
+            labels = np.load('../data/pokec_dataset/region_job_2_2_labels.npy')
+
+        adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
+                            shape=(labels.shape[0], labels.shape[0]),
+                            dtype=np.float32)
+        adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
+        return adj
 
     path="dataset/"
     dataset = dataset_name
@@ -114,6 +132,18 @@ elif dataset_name == 'nba':
     norm_features = feature_norm(features_vanilla)
     norm_features[:, 0] = features_vanilla[:, 0]
     features_vanilla = norm_features
+elif dataset_name == 'income': 
+    model = torch.load('gcn_' + dataset_name + '.pth')
+    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, 
+        idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_income('income')
+elif dataset_name == 'pokec1':
+    model = torch.load('gcn_' + dataset_name + '.pth')
+    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_pokec_renewed(1)
+elif dataset_name == 'pokec2':
+    model = torch.load('gcn_' + dataset_name + '.pth')
+    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_pokec_renewed(2)
+
+
 
 edge_index = convert.from_scipy_sparse_matrix(adj_vanilla)[0]
 print("Pre-processing data...")
