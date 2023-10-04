@@ -314,7 +314,7 @@ def tst():
     preds = (output.squeeze() > 0).type_as(labels)
     loss_test = F.binary_cross_entropy_with_logits(output[idx_test], labels[idx_test].unsqueeze(1).float())
     acc_test = accuracy_new(preds[idx_test], labels[idx_test])
-
+    sens.to(torch.device('cuda'))
     idx_sens_test = sens[idx_test]
     idx_output_test = output[idx_test]
     fair_cost_records.append(wasserstein_distance(idx_output_test[idx_sens_test==0].squeeze().cpu().detach().numpy(), idx_output_test[idx_sens_test==1].squeeze().cpu().detach().numpy()))
@@ -323,6 +323,8 @@ def tst():
     f1_test = f1_score(labels[idx_test].cpu().numpy(), preds[idx_test].cpu().numpy())
     parity, equality = fair_metric(preds[idx_test].cpu().numpy(), labels[idx_test].cpu().numpy(),
                                    sens[idx_test].numpy())
+
+    # sens.to(torch.device('cuda'))
 
     sp_records.append(parity)
     eo_records.append(equality)
