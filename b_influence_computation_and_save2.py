@@ -59,14 +59,14 @@ def feature_norm(features):
     return 2*(features - min_values).div(max_values-min_values) - 1
 
 def get_adj(_name):
-     predict_attr = "RECID"
+    predict_attr = "RECID"
     if dataset_name == 'bail':
         predict_attr="RECID"
     elif dataset_name == 'income':
         predict_attr = "income"
     elif dataset_name = 'nba':
         predict_attr == 'nba'
-    if dataset_name == 'pokec1' or dataset_name == 'pokec2':
+    elif dataset_name == 'pokec1' or dataset_name == 'pokec2':
         if dataset_name == 'pokec1':
             edges = np.load('../data/pokec_dataset/region_job_1_edges.npy')
             labels = np.load('../data/pokec_dataset/region_job_1_labels.npy')
