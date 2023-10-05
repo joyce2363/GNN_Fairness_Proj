@@ -167,7 +167,7 @@ def del_adj(harmful, dataset_name):
         adj = adj + sp.eye(adj.shape[0])
         return adj
 
-    path="../data/" + str(dataset_name) + "/"
+    path="/home/joyce/dataset/" + str(dataset_name) + "/"
     dataset = dataset_name
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
     header = list(idx_features_labels.columns)
