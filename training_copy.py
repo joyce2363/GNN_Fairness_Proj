@@ -2,7 +2,7 @@ from __future__ import division
 from __future__ import print_function
 from torch_geometric.utils import convert
 import time
-# import argparse
+import argparse
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -13,77 +13,42 @@ from scipy.stats import wasserstein_distance
 from tqdm import tqdm
 import warnings
 warnings.filterwarnings('ignore')
+import ctypes
 
-print("testing file")
 # Training settings
-import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
-parser.add_argument('--dataset', type=str, default="pokec2", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
-# parser.add_argument('--seed', type=int, default=1, help='Random seed.')
+parser.add_argument('--dataset', type=str, default="income", help='One dataset from income, bail, pokec1, and pokec2.')
+parser.add_argument('--seed', type=int, default=10, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=1000,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.001,
                     help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=1e-4,
                     help='Weight decay (L2 loss on parameters).')
-parser.add_argument('--hidden', type=int, default=62,
+parser.add_argument('--hidden', type=int, default=16,
                     help='Number of hidden units.')
 parser.add_argument('--dropout', type=float, default=0.5,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--sens_number', type=int, default=200,
-                    help="the number of sensitive attributes")
-parser.add_argument('--label_number', type=int, default=500,
-                    help="the number of labels")
+
 args = parser.parse_args()
-# if args.seed: 
-#     print("using seed: ", args.seed)
-if args.dataset:
-    dataset_name = args.dataset
-    print("using dataset: ", args.dataset)
-
-# parser = argparse.ArgumentParser()
-# parser.add_argument('--no-cuda', action='store_true', default=False,
-#                     help='Disables CUDA training.')
-# parser.add_argument('--fastmode', action='store_true', default=False,
-#                     help='Validate during training pass.')
-# parser.add_argument('--dataset', type=str, default="pokec2", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
-# parser.add_argument('--seed', type=int, default=1, help='Random seed.')
-# parser.add_argument('--epochs', type=int, default=1000,
-#                     help='Number of epochs to train.')
-# parser.add_argument('--lr', type=float, default=0.001,
-#                     help='Initial learning rate.')
-# parser.add_argument('--weight_decay', type=float, default=1e-4,
-#                     help='Weight decay (L2 loss on parameters).')
-# parser.add_argument('--hidden', type=int, default=62,
-#                     help='Number of hidden units.')
-# parser.add_argument('--dropout', type=float, default=0.5,
-#                     help='Dropout rate (1 - keep probability).')
-# parser.add_argument('--sens_number', type=int, default=200,
-#                     help="the number of sensitive attributes")
-# parser.add_argument('--label_number', type=int, default=500,
-#                     help="the number of labels")
-
-# args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
-# np.random.seed(args.seed)
-# torch.manual_seed(args.seed)
+dataset_name = args.dataset
+np.random.seed(args.seed)
+torch.manual_seed(args.seed)
 if args.cuda:
-    # torch.cuda.manual_seed(args.seed)
-    print("works")
-# def call_BIND_training1(): 
+    torch.cuda.manual_seed(args.seed)
+
 def feature_norm(features):
     min_values = features.min(axis=0)[0]
     max_values = features.max(axis=0)[0]
     return 2*(features - min_values).div(max_values-min_values) - 1
-print("loading: ", dataset_name)
 
-if dataset_name == 'nba':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN('nba')
-    # print("adj_b_training:   ", adj)
+if dataset_name == 'bail':
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_bail('bail')
     norm_features = feature_norm(features)
     norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
@@ -92,58 +57,13 @@ elif dataset_name == 'income':
     norm_features = feature_norm(features)
     norm_features[:, 8] = features[:, 8]
     features = feature_norm(features)
-elif dataset_name == 'bail':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_bail('bail')
-    norm_features = feature_norm(features)
-    norm_features[:, 0] = features[:, 0]
-    features = feature_norm(features)
 elif dataset_name == 'pokec1':
     adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(1)
 elif dataset_name == 'pokec2':
     adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(2)
-# elif dataset_name == 'fair_pokec1': 
-#     dataset = 'region_job'
-#     sens_attr = "region"
-#     predict_attr = "I_am_working_in_field"
-#     label_number = args.label_number
-#     sens_number = args.sens_number
-#     seed = args.seed
-#     path="/home/joyce/dataset/pokec_fairGNN"
-#      # /home/joyce/dataset/pokec_fairGNN (this is the path for running in docker container)
-#     test_idx=False
-#     adj, features, labels, idx_train, idx_val, idx_test,sens = load_pokec(dataset,
-#                                                                                     sens_attr,
-#                                                                                     predict_attr,
-#                                                                                     path=path,
-#                                                                                     label_number=label_number,
-#                                                                                     sens_number=sens_number,
-#                                                                                     seed=seed,test_idx=test_idx)
-# elif dataset_name == 'fair_pokec2': 
-#     dataset = 'region_job_2'
-#     print('dataset :', dataset)
-
-#     sens_attr = "region"
-#     predict_attr = "I_am_working_in_field"
-#     label_number = args.label_number
-#     sens_number = args.sens_number
-#     seed = args.seed
-#     path="/home/joyce/dataset/pokec_fairGNN"
-#      # /home/joyce/dataset/pokec_fairGNN (this is the path for running in docker container)
-#     test_idx=False
-#     adj, features, labels, idx_train, idx_val, idx_test,sens = load_pokec(dataset,
-#                                                                                     sens_attr,
-#                                                                                     predict_attr,
-#                                                                                     path=path,
-#                                                                                     label_number=label_number,
-#                                                                                     sens_number=sens_number,
-#                                                                                     seed=seed,test_idx=test_idx)
-
 
 edge_index = convert.from_scipy_sparse_matrix(adj)[0]
-print('edge_index: ', edge_index)
-# nclass=labels.unique().shape[0]-1 # use this for the bail data set but nclass=1 for the nba dataset
-model = GCN(nfeat=features.shape[1], nhid=args.hidden, nclass=1, dropout=args.dropout)
-# model = FairGNN(nfeat = features.shape[1], args = args)
+model = GCN(nfeat=features.shape[1], nhid=args.hidden, nclass=labels.unique().shape[0]-1, dropout=args.dropout)
 optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
 if args.cuda:
@@ -183,8 +103,16 @@ def train(epoch):
     if not args.fastmode:
         model.eval()
         output = model(features, edge_index)
+
     loss_val = F.binary_cross_entropy_with_logits(output[idx_val], labels[idx_val].unsqueeze(1).float())
     acc_val = accuracy_new(preds[idx_val], labels[idx_val])
+    # print('Epoch: {:04d}'.format(epoch+1),
+    #       'loss_train: {:.4f}'.format(loss_train.item()),
+    #       'acc_train: {:.4f}'.format(acc_train.item()),
+    #       'loss_val: {:.4f}'.format(loss_val.item()),
+    #       'acc_val: {:.4f}'.format(acc_val.item()),
+    #       'time: {:.4f}s'.format(time.time() - t))
+
     return loss_val.item()
 
 def tst():
@@ -197,7 +125,6 @@ def tst():
     print("*****************  Cost  ********************")
     print("SP cost:")
     idx_sens_test = sens[idx_test]
-    # idx_sens_test = idx_sens_test.to(torch.device('cuda'))
     idx_output_test = output[idx_test]
     print(wasserstein_distance(idx_output_test[idx_sens_test==0].squeeze().cpu().detach().numpy(), idx_output_test[idx_sens_test==1].squeeze().cpu().detach().numpy()))
 
@@ -208,7 +135,7 @@ def tst():
     print("**********************************************")
 
     parity, equality = fair_metric(preds[idx_test].cpu().numpy(), labels[idx_test].cpu().numpy(),
-                                   sens[idx_test].cpu().numpy())
+                                   sens[idx_test].numpy())
 
     print("Test set results:",
           "loss= {:.4f}".format(loss_test.item()),
@@ -236,12 +163,3 @@ ending = time.time()
 print("Time:", ending - starting, "s")
 model = torch.load('gcn_' + dataset_name + '.pth')
 tst()
-
-##### check
-
-
-
-
-
-
-
