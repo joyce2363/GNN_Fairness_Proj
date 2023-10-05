@@ -42,7 +42,7 @@ parser.add_argument('--hidden', type=int, default=16,
                     help='Number of hidden units.')
 parser.add_argument('--dropout', type=float, default=0.5,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--helpfulness_collection', type=int, default=0,
+parser.add_argument('--helpfulness_collection', type=int, default=1,
                     help='do leave-one-out for helpful nodes.')
 
 
