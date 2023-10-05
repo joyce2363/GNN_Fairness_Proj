@@ -266,7 +266,7 @@ max_num = 0
 for i in range(len(final_influence[harmful_idx]) - 1):
     if final_influence[harmful_idx][i] * final_influence[harmful_idx][i+1] <= 0:
         print("At most effective number:")
-        print("testing:", i + 1)
+        print(i + 1)
         max_num = i + 1
         break
 
