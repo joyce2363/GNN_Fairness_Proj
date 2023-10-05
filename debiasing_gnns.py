@@ -2,7 +2,7 @@ import numpy as np
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default="pokec1", help='One dataset from income, bail, pokec1, and pokec2.')
+parser.add_argument('--dataset', type=str, default="pokec2", help='One dataset from income, bail, pokec1, and pokec2.')
 args = parser.parse_args()
 dataset_name = args.dataset
 

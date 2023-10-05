@@ -21,7 +21,7 @@ torch.backends.cudnn.benchmark = True
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default="pokec1", help='dataset')
+parser.add_argument('--dataset', type=str, default="pokec2", help='dataset')
 parser.add_argument('--seed', type=int, default=1, help='Random seed.')
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
