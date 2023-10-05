@@ -128,7 +128,7 @@ def get_adj(dataset_name):
 
     features = sp.csr_matrix(idx_features_labels[header], dtype=np.float32)
     labels = idx_features_labels[predict_attr].values
-
+    print("testing labels:", labels)
     idx = np.arange(features.shape[0])
     idx_map = {j: i for i, j in enumerate(idx)}
     edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
