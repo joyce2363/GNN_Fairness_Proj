@@ -393,7 +393,7 @@ for num_of_deleting in tqdm(range(int(percetage_budget * max_num//batch_size) + 
 
     adj = del_adj(harmful_flags, dataset_name)
     edge_index = convert.from_scipy_sparse_matrix(adj)[0]
-    model = torch.load('gcn_' + dataset_name + seed + '.pth')
+    model = torch.load('gcn_' + dataset_name + '.pth')
     optimizer = optim.Adam(model.parameters(),
                            lr=args.lr, weight_decay=args.weight_decay)
 
