@@ -123,19 +123,19 @@ if dataset_name == 'bail':
     norm_features[:, 0] = features_vanilla[:, 0]
     features_vanilla = norm_features
 elif dataset_name == 'nba': 
-    model = torch.load('gcn_' + dataset_name + '.pth')
+    model = torch.load('gcn_' + dataset_name + seed + '.pth')
     adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_nba_parameters_fairGNN('nba')
     norm_features = feature_norm(features_vanilla)
     norm_features[:, 0] = features_vanilla[:, 0]
     features_vanilla = norm_features
 elif dataset_name == 'income': 
-    model = torch.load('gcn_' + dataset_name + '.pth')
+    model = torch.load('gcn_' + dataset_name + seed + '.pth')
     adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_income('income')
 elif dataset_name == 'pokec1':
-    model = torch.load('gcn_' + dataset_name + '.pth')
+    model = torch.load('gcn_' + dataset_name + seed + '.pth')
     adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_pokec_renewed(1)
 elif dataset_name == 'pokec2':
-    model = torch.load('gcn_' + dataset_name + '.pth')
+    model = torch.load('gcn_' + dataset_name + seed + '.pth')
     adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_pokec_renewed(2)
 
 edge_index = convert.from_scipy_sparse_matrix(adj_vanilla)[0]
