@@ -21,7 +21,7 @@ torch.backends.cudnn.benchmark = True
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default="income", help='dataset')
+parser.add_argument('--dataset', type=str, default="pokec1", help='dataset')
 parser.add_argument('--seed', type=int, default=1, help='Random seed.')
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
@@ -75,11 +75,11 @@ def get_adj(_name):
         predict_attr = 'nba'
     elif dataset_name == 'pokec1' or dataset_name == 'pokec2':
         if dataset_name == 'pokec1':
-            edges = np.load('../data/pokec_dataset/region_job_1_edges.npy')
-            labels = np.load('../data/pokec_dataset/region_job_1_labels.npy')
+            edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_edges.npy')
+            labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_labels.npy')
         else:
-            edges = np.load('../data/pokec_dataset/region_job_2_2_edges.npy')
-            labels = np.load('../data/pokec_dataset/region_job_2_2_labels.npy')
+            edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_edges.npy')
+            labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_labels.npy')
 
         adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
                             shape=(labels.shape[0], labels.shape[0]),

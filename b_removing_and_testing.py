@@ -30,7 +30,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
-parser.add_argument('--dataset', type=str, default="income", help='One dataset from income, bail, pokec1, and pokec2.')
+parser.add_argument('--dataset', type=str, default="pokec1", help='One dataset from income, bail, pokec1, and pokec2.')
 parser.add_argument('--seed', type=int, default=1, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=30,
                     help='Number of epochs to continue training for estimation evaluation.')
@@ -150,11 +150,11 @@ def del_adj(harmful, dataset_name):
 
     if dataset_name == 'pokec1' or dataset_name == 'pokec2':
         if dataset_name == 'pokec1':
-            edges = np.load('../data/pokec_dataset/region_job_1_edges.npy')
-            labels = np.load('../data/pokec_dataset/region_job_1_labels.npy')
+            edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_edges.npy')
+            labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_labels.npy')
         else:
-            edges = np.load('../data/pokec_dataset/region_job_2_2_edges.npy')
-            labels = np.load('../data/pokec_dataset/region_job_2_2_labels.npy')
+            edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_edges.npy')
+            labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_labels.npy')
 
         adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
                             shape=(labels.shape[0], labels.shape[0]),
