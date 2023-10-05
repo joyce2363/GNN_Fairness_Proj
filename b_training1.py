@@ -17,11 +17,29 @@ warnings.filterwarnings('ignore')
 # Training settings
 import argparse
 parser = argparse.ArgumentParser()
+parser.add_argument('--no-cuda', action='store_true', default=False,
+                    help='Disables CUDA training.')
+parser.add_argument('--fastmode', action='store_true', default=False,
+                    help='Validate during training pass.')
 parser.add_argument('--dataset', type=str, default="pokec2", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
-parser.add_argument('--seed', type=int, default=1, help='Random seed.')
+# parser.add_argument('--seed', type=int, default=1, help='Random seed.')
+parser.add_argument('--epochs', type=int, default=1000,
+                    help='Number of epochs to train.')
+parser.add_argument('--lr', type=float, default=0.001,
+                    help='Initial learning rate.')
+parser.add_argument('--weight_decay', type=float, default=1e-4,
+                    help='Weight decay (L2 loss on parameters).')
+parser.add_argument('--hidden', type=int, default=62,
+                    help='Number of hidden units.')
+parser.add_argument('--dropout', type=float, default=0.5,
+                    help='Dropout rate (1 - keep probability).')
+parser.add_argument('--sens_number', type=int, default=200,
+                    help="the number of sensitive attributes")
+parser.add_argument('--label_number', type=int, default=500,
+                    help="the number of labels")
 args = parser.parse_args()
-if args.seed: 
-    print("using seed: ", args.seed)
+# if args.seed: 
+#     print("using seed: ", args.seed)
 if args.dataset:
     dataset_name = args.dataset
     print("using dataset: ", args.dataset)
