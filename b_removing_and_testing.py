@@ -24,36 +24,44 @@ import warnings
 warnings.filterwarnings('ignore')
 import ctypes
 # ctypes.cdll.LoadLibrary('caffe2_nvrtc.dll')
-
+import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('--no-cuda', action='store_true', default=False,
-                    help='Disables CUDA training.')
-parser.add_argument('--fastmode', action='store_true', default=False,
-                    help='Validate during training pass.')
-parser.add_argument('--dataset', type=str, default="pokec2", help='One dataset from income, bail, pokec1, and pokec2.')
-parser.add_argument('--seed', type=int, default=1, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=30,
-                    help='Number of epochs to continue training for estimation evaluation.')
-parser.add_argument('--lr', type=float, default=0.01,
-                    help='Initial learning rate.')
-parser.add_argument('--weight_decay', type=float, default=0,
-                    help='Weight decay (L2 loss on parameters).')
-parser.add_argument('--hidden', type=int, default=16,
-                    help='Number of hidden units.')
-parser.add_argument('--dropout', type=float, default=0.5,
-                    help='Dropout rate (1 - keep probability).')
-parser.add_argument('--helpfulness_collection', type=int, default=1,
-                    help='do leave-one-out for helpful nodes.')
-
-
+parser.add_argument('--dataset', type=str, default="pokec2", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
 args = parser.parse_args()
-args.cuda = not args.no_cuda and torch.cuda.is_available()
-np.random.seed(args.seed)
-torch.manual_seed(args.seed)
-torch.cuda.manual_seed(args.seed)
-dataset_name = args.dataset
-open_factor = args.helpfulness_collection
-print(open_factor)
+if args.dataset:
+    dataset_name = args.dataset
+    print("using dataset: ", args.dataset)
+if args.seed:
+    print("using seed: ", args.seed)
+# parser = argparse.ArgumentParser()
+# parser.add_argument('--no-cuda', action='store_true', default=False,
+#                     help='Disables CUDA training.')
+# parser.add_argument('--fastmode', action='store_true', default=False,
+#                     help='Validate during training pass.')
+# parser.add_argument('--dataset', type=str, default="pokec2", help='One dataset from income, bail, pokec1, and pokec2.')
+# parser.add_argument('--seed', type=int, default=1, help='Random seed.')
+# parser.add_argument('--epochs', type=int, default=30,
+#                     help='Number of epochs to continue training for estimation evaluation.')
+# parser.add_argument('--lr', type=float, default=0.01,
+#                     help='Initial learning rate.')
+# parser.add_argument('--weight_decay', type=float, default=0,
+#                     help='Weight decay (L2 loss on parameters).')
+# parser.add_argument('--hidden', type=int, default=16,
+#                     help='Number of hidden units.')
+# parser.add_argument('--dropout', type=float, default=0.5,
+#                     help='Dropout rate (1 - keep probability).')
+# parser.add_argument('--helpfulness_collection', type=int, default=1,
+#                     help='do leave-one-out for helpful nodes.')
+
+
+# args = parser.parse_args()
+# args.cuda = not args.no_cuda and torch.cuda.is_available()
+# np.random.seed(args.seed)
+# torch.manual_seed(args.seed)
+# torch.cuda.manual_seed(args.seed)
+# dataset_name = args.dataset
+# open_factor = args.helpfulness_collection
+# print(open_factor)
 
 def accuracy_new(output, labels):
     correct = output.eq(labels).double()
