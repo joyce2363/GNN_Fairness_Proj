@@ -1,4 +1,4 @@
-from src.b_utils import load_nba_try, load_bail, load_nba_parameters_fairGNN, load_income
+from src.b_utils import load_nba_try, load_bail, load_nba_parameters_fairGNN, load_income, load_pokec_renewed
 from numpy import *
 
 from approximator import grad_z_graph, cal_influence_graph, s_test_graph_cost, cal_influence_graph_nodal
