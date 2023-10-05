@@ -323,7 +323,7 @@ def tst():
     auc_roc_test = roc_auc_score(labels[idx_test].cpu().numpy(), output[idx_test].detach().cpu().numpy())
     f1_test = f1_score(labels[idx_test].cpu().numpy(), preds[idx_test].cpu().numpy())
     parity, equality = fair_metric(preds[idx_test].cpu().numpy(), labels[idx_test].cpu().numpy(),
-                                   sens[idx_test].numpy())
+                                   sens[idx_test].cpu().numpy())
 
     sp_records.append(parity)
     eo_records.append(equality)
