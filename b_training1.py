@@ -14,6 +14,7 @@ from tqdm import tqdm
 import warnings
 warnings.filterwarnings('ignore')
 
+print("testing file")
 # Training settings
 import argparse
 parser = argparse.ArgumentParser()
