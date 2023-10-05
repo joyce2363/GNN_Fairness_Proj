@@ -44,13 +44,14 @@ parser.add_argument('--dropout', type=float, default=0.5,
                     help='Dropout rate (1 - keep probability).')
 parser.add_argument('--helpfulness_collection', type=int, default=0,
                     help='do leave-one-out for helpful nodes.')
-seed = args.seed
+
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 torch.cuda.manual_seed(args.seed)
 dataset_name = args.dataset
+seed = args.seed
 open_factor = args.helpfulness_collection
 print(open_factor)
 
