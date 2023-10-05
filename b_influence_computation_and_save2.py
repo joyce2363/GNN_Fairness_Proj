@@ -16,47 +16,39 @@ import warnings
 warnings.filterwarnings('ignore')
 torch.backends.cudnn.benchmark = True
 
-
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--verbosity", help="increase output verbosity")
 args = parser.parse_args()
 if args.verbosity:
     print("verbosity turned on")
+parser = argparse.ArgumentParser()
+parser.add_argument('--model',type=str,default='A2DUG',help='Model')
+parser.add_argument('--dataset',type=str,default='flickr',help='Dataset')
+parser.add_argument('--seed', type=int, default=100, help='Random seed.')
 
-# import argparse
+args = parser.parse_args()
+
 # parser = argparse.ArgumentParser()
-# parser.add_argument("--verbosity", help="increase output verbosity")
-# args = parser.parse_args()
-# if args.verbosity:
-#     print("verbosity turned on")
-# parser = argparse.ArgumentParser()
-# parser.add_argument('--model',type=str,default='A2DUG',help='Model')
-# parser.add_argument('--dataset',type=str,default='flickr',help='Dataset')
-# parser.add_argument('--seed', type=int, default=100, help='Random seed.')
+# # parser.add_argument('--dataset', type=str, default="pokec2", help='dataset')
+# parser.add_argument('--dataset', required=True,
+#         help='pokec1, pokec2, income, bail, nba')
+# parser.add_argument('--seed', type=int, default=1, help='Random seed.')
+# parser.add_argument('--no-cuda', action='store_true', default=False,
+#                     help='Disables CUDA training.')
+# args, unknown = parser.parse_known_args()
+args.cuda = not args.no_cuda and torch.cuda.is_available()
 
-# args = parser.parse_args()
+if args.cuda:
+    torch.cuda.manual_seed(args.seed)
+if dataset == 'income':
+    args.dataset = dataset
+    print("using: ", args.dataset)
 
-# # parser = argparse.ArgumentParser()
-# # # parser.add_argument('--dataset', type=str, default="pokec2", help='dataset')
-# # parser.add_argument('--dataset', required=True,
-# #         help='pokec1, pokec2, income, bail, nba')
-# # parser.add_argument('--seed', type=int, default=1, help='Random seed.')
-# # parser.add_argument('--no-cuda', action='store_true', default=False,
-# #                     help='Disables CUDA training.')
-# # args, unknown = parser.parse_known_args()
-# args.cuda = not args.no_cuda and torch.cuda.is_available()
-
-# if args.cuda:
-#     torch.cuda.manual_seed(args.seed)
-# if dataset == 'income':
-#     args.dataset = dataset
-#     print("using: ", args.dataset)
-
-# dataset_name = args.dataset
-# np.random.seed(args.seed)
-# torch.manual_seed(args.seed)
-# # torch.cuda.manual_seed(args.seed)
+dataset_name = args.dataset
+np.random.seed(args.seed)
+torch.manual_seed(args.seed)
+# torch.cuda.manual_seed(args.seed)
 
 def find123Nei(G, node):
     nodes = list(nx.nodes(G))
