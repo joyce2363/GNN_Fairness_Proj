@@ -21,11 +21,11 @@ torch.backends.cudnn.benchmark = True
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default="bail", help='dataset')
+parser.add_argument('--dataset', type=str, default="income", help='dataset')
 parser.add_argument('--seed', type=int, default=1, help='Random seed.')
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
-args = parser.parse_args()
+args, unknown = parser.parse_known_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 
 if args.cuda:
