@@ -340,19 +340,24 @@ def tst():
 
 
 if dataset_name == 'bail':
-    adj_ori, features_ori, labels_ori, idx_train_ori, idx_val_ori, idx_test_ori, sens_ori = load_bail('bail', seed = args.seed)
+    adj_ori, features_ori, labels_ori, idx_train_ori, idx_val_ori, idx_test_ori, sens_ori = load_bail('bail', seed = args.seed, local = args.local)
+    norm_features_ori = feature_norm(features_ori)
+    norm_features_ori[:, 0] = features_ori[:, 0]
+    features_ori = feature_norm(features_ori)
+elif dataset_name == 'nba': 
+    adj_ori, features_ori, labels_ori, idx_train_ori, idx_val_ori, idx_test_ori, sens_ori = load_nba('nba', seed = args.seed, local = args.local)
     norm_features_ori = feature_norm(features_ori)
     norm_features_ori[:, 0] = features_ori[:, 0]
     features_ori = feature_norm(features_ori)
 elif dataset_name == 'income':
-    adj_ori, features_ori, labels_ori, idx_train_ori, idx_val_ori, idx_test_ori, sens_ori = load_income('income', seed = args.seed)
+    adj_ori, features_ori, labels_ori, idx_train_ori, idx_val_ori, idx_test_ori, sens_ori = load_income('income', seed = args.seed, local = args.local)
     norm_features_ori = feature_norm(features_ori)
     norm_features_ori[:, 8] = features_ori[:, 8]
     features_ori = feature_norm(features_ori)
 elif dataset_name == 'pokec1':
-    adj_ori, features_ori, labels_ori, idx_train_ori, idx_val_ori, idx_test_ori, sens_ori = load_pokec_renewed(1, seed = args.seed)
+    adj_ori, features_ori, labels_ori, idx_train_ori, idx_val_ori, idx_test_ori, sens_ori = load_pokec_renewed(1, seed = args.seed, local = args.local)
 elif dataset_name == 'pokec2':
-    adj_ori, features_ori, labels_ori, idx_train_ori, idx_val_ori, idx_test_ori, sens_ori = load_pokec_renewed(2, seed = args.seed)
+    adj_ori, features_ori, labels_ori, idx_train_ori, idx_val_ori, idx_test_ori, sens_ori = load_pokec_renewed(2, seed = args.seed, local = args.local)
 
 edge_index_ori = convert.from_scipy_sparse_matrix(adj_ori)[0]
 
