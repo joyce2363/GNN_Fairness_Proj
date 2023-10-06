@@ -118,7 +118,7 @@ def del_adj(harmful):
 
 if dataset_name == 'bail':
     model = torch.load('/home/joyce/' + 'gcn_' + dataset_name + '.pth')
-    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_bail('bail')
+    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_bail('bail', seed = args.seed)
     norm_features = feature_norm(features_vanilla)
     norm_features[:, 0] = features_vanilla[:, 0]
     features_vanilla = norm_features
