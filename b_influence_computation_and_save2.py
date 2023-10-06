@@ -20,6 +20,8 @@ torch.backends.cudnn.benchmark = True
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default="hajsdhjs", help='One dataset from income, bail, pokec1, and pokec2.')
 parser.add_argument('--seed', type=int, default=10, help='Random seed.')
+parser.add_argument('--local', type=int, default=False,
+                    help="run on docker or local")
 args = parser.parse_args()
 
 dataset_name = args.dataset

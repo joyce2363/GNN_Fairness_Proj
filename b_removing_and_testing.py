@@ -44,6 +44,8 @@ parser.add_argument('--dropout', type=float, default=0.5,
                     help='Dropout rate (1 - keep probability).')
 parser.add_argument('--helpfulness_collection', type=int, default=1,
                     help='do leave-one-out for helpful nodes.')
+parser.add_argument('--local', type=int, default=False,
+                    help="run on docker or local")
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
