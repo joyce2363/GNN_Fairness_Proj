@@ -19,11 +19,10 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 from scipy.stats import wasserstein_distance
-from src.b_utils import load_bail, load_income, load_pokec_renewed
+from src.b_utils import load_bail, load_income, load_pokec_renewed, load_nba_parameters_fairGNN
 import warnings
 warnings.filterwarnings('ignore')
 import ctypes
-# ctypes.cdll.LoadLibrary('caffe2_nvrtc.dll')
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--no-cuda', action='store_true', default=False,
@@ -225,7 +224,7 @@ elif dataset_name == 'income':
     norm_features[:, 8] = features[:, 8]
     features = feature_norm(features)
 elif dataset_name == 'nba': 
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba('nba', seed = args.seed, local = args.local)
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN('nba', seed = args.seed, local = args.local)
     norm_features = feature_norm(features)
     norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
@@ -345,7 +344,7 @@ if dataset_name == 'bail':
     norm_features_ori[:, 0] = features_ori[:, 0]
     features_ori = feature_norm(features_ori)
 elif dataset_name == 'nba': 
-    adj_ori, features_ori, labels_ori, idx_train_ori, idx_val_ori, idx_test_ori, sens_ori = load_nba('nba', seed = args.seed, local = args.local)
+    adj_ori, features_ori, labels_ori, idx_train_ori, idx_val_ori, idx_test_ori, sens_ori = load_nba_parameters_fairGNN('nba', seed = args.seed, local = args.local)
     norm_features_ori = feature_norm(features_ori)
     norm_features_ori[:, 0] = features_ori[:, 0]
     features_ori = feature_norm(features_ori)
