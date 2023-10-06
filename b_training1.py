@@ -23,7 +23,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
 parser.add_argument('--dataset', type=str, default="pokec2", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
-parser.add_argument('--seed', type=int, default=1, help='Random seed.')
+parser.add_argument('--seed', type=int, default= 10, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=1000,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.001,
@@ -82,25 +82,25 @@ def feature_norm(features):
 print("loading: ", dataset_name)
 
 if dataset_name == 'nba':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN('nba')
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN('nba', seed = args.seed)
     # print("adj_b_training:   ", adj)
     norm_features = feature_norm(features)
     norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
 elif dataset_name == 'income':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_income('income')
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_income('income', seed = args.seed)
     norm_features = feature_norm(features)
     norm_features[:, 8] = features[:, 8]
     features = feature_norm(features)
 elif dataset_name == 'bail':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_bail('bail')
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_bail('bail', seed = args.seed)
     norm_features = feature_norm(features)
     norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
 elif dataset_name == 'pokec1':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(1)
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(1, seed=args.seed)
 elif dataset_name == 'pokec2':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(2)
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(2, seed=args.seed)
 # elif dataset_name == 'fair_pokec1': 
 #     dataset = 'region_job'
 #     sens_attr = "region"

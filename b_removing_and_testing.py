@@ -31,7 +31,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
 parser.add_argument('--dataset', type=str, default="bail", help='One dataset from income, bail, pokec1, and pokec2.')
-parser.add_argument('--seed', type=int, default=1, help='Random seed.')
+parser.add_argument('--seed', type=int, default= 10, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=30,
                     help='Number of epochs to continue training for estimation evaluation.')
 parser.add_argument('--lr', type=float, default=0.01,
@@ -42,7 +42,7 @@ parser.add_argument('--hidden', type=int, default=16,
                     help='Number of hidden units.')
 parser.add_argument('--dropout', type=float, default=0.5,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--helpfulness_collection', type=int, default=0,
+parser.add_argument('--helpfulness_collection', type=int, default=1,
                     help='do leave-one-out for helpful nodes.')
 
 args = parser.parse_args()
