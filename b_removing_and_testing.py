@@ -213,19 +213,24 @@ def feature_norm(features):
     return 2*(features - min_values).div(max_values-min_values) - 1
 
 if dataset_name == 'bail':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_bail('bail')
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_bail('bail', seed = args.seed)
     norm_features = feature_norm(features)
     norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
 elif dataset_name == 'income':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_income('income')
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_income('income', seed = args.seed)
     norm_features = feature_norm(features)
     norm_features[:, 8] = features[:, 8]
     features = feature_norm(features)
+elif dataset_name == 'nba': 
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba('nba', seed = args.seed)
+    norm_features = feature_norm(features)
+    norm_features[:, 0] = features[:, 0]
+    features = feature_norm(features)
 elif dataset_name == 'pokec1':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(1)
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(1, seed = args.seed)
 elif dataset_name == 'pokec2':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(2)
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(2, seed = args.seed)
 
 edge_index = convert.from_scipy_sparse_matrix(adj)[0]
 computation_graph_involving = []

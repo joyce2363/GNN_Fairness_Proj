@@ -124,19 +124,19 @@ if dataset_name == 'bail':
     features_vanilla = norm_features
 elif dataset_name == 'nba': 
     model = torch.load('gcn_' + dataset_name + '.pth')
-    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_nba_parameters_fairGNN('nba')
+    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_nba_parameters_fairGNN('nba', seed = args.seed)
     norm_features = feature_norm(features_vanilla)
     norm_features[:, 0] = features_vanilla[:, 0]
     features_vanilla = norm_features
 elif dataset_name == 'income': 
     model = torch.load('gcn_' + dataset_name + '.pth')
-    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_income('income')
+    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_income('income', seed = args.seed)
 elif dataset_name == 'pokec1':
     model = torch.load('gcn_' + dataset_name + '.pth')
-    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_pokec_renewed(1)
+    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_pokec_renewed(1, seed = args.seed)
 elif dataset_name == 'pokec2':
     model = torch.load('gcn_' + dataset_name + '.pth')
-    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_pokec_renewed(2)
+    adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_pokec_renewed(2, seed = args.seed)
 
 edge_index = convert.from_scipy_sparse_matrix(adj_vanilla)[0]
 print("Pre-processing data...")
