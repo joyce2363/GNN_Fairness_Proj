@@ -42,14 +42,14 @@ def build_relationship(x, thresh=0.25):
 
 
 
-def load_pokec_renewed(dataset, seed, label_number=1000):  # 1000
+def load_pokec_renewed(dataset, seed, local, label_number=1000):  # 1000
 # /home/joyce/dataset/pokec_fairGNN path for in docker 
     if local: 
         edges = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_' + str(dataset) + '_edges.npy')
         features = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_' + str(dataset) + '_features.npy')
         labels = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_' + str(dataset) + '_labels.npy')
         sens = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_' + str(dataset) + '_sens.npy')
-    elif: 
+    else: 
         edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_' + str(dataset) + '_edges.npy')
         features = np.load('/home/joyce/dataset/pokec_BIND/region_job_' + str(dataset) + '_features.npy')
         labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_' + str(dataset) + '_labels.npy')

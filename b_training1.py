@@ -38,6 +38,8 @@ parser.add_argument('--sens_number', type=int, default=200,
                     help="the number of sensitive attributes")
 parser.add_argument('--label_number', type=int, default=500,
                     help="the number of labels")
+parser.add_argument('--local', type=int, default=False,
+                    help="run on docker or local")
 args = parser.parse_args()
 # if args.seed: 
 #     print("using seed: ", args.seed)
@@ -45,36 +47,13 @@ if args.dataset:
     dataset_name = args.dataset
     print("using dataset: ", args.dataset)
 
-# parser = argparse.ArgumentParser()
-# parser.add_argument('--no-cuda', action='store_true', default=False,
-#                     help='Disables CUDA training.')
-# parser.add_argument('--fastmode', action='store_true', default=False,
-#                     help='Validate during training pass.')
-# parser.add_argument('--dataset', type=str, default="pokec2", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
-# parser.add_argument('--seed', type=int, default=1, help='Random seed.')
-# parser.add_argument('--epochs', type=int, default=1000,
-#                     help='Number of epochs to train.')
-# parser.add_argument('--lr', type=float, default=0.001,
-#                     help='Initial learning rate.')
-# parser.add_argument('--weight_decay', type=float, default=1e-4,
-#                     help='Weight decay (L2 loss on parameters).')
-# parser.add_argument('--hidden', type=int, default=62,
-#                     help='Number of hidden units.')
-# parser.add_argument('--dropout', type=float, default=0.5,
-#                     help='Dropout rate (1 - keep probability).')
-# parser.add_argument('--sens_number', type=int, default=200,
-#                     help="the number of sensitive attributes")
-# parser.add_argument('--label_number', type=int, default=500,
-#                     help="the number of labels")
-
-# args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 # np.random.seed(args.seed)
 # torch.manual_seed(args.seed)
 if args.cuda:
     # torch.cuda.manual_seed(args.seed)
     print("works")
-# def call_BIND_training1(): 
+
 def feature_norm(features):
     min_values = features.min(axis=0)[0]
     max_values = features.max(axis=0)[0]
@@ -82,13 +61,12 @@ def feature_norm(features):
 print("loading: ", dataset_name)
 
 if dataset_name == 'nba':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN('nba', seed = args.seed)
-    # print("adj_b_training:   ", adj)
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN('nba', seed = args.seed, local = args.local)
     norm_features = feature_norm(features)
     norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
 elif dataset_name == 'income':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_income('income', seed = args.seed)
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_income('income', seed = args.seed, local = args.local)
     norm_features = feature_norm(features)
     norm_features[:, 8] = features[:, 8]
     features = feature_norm(features)
@@ -98,9 +76,9 @@ elif dataset_name == 'bail':
     norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
 elif dataset_name == 'pokec1':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(1, seed=args.seed)
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(1, seed=args.seed, local = args.local)
 elif dataset_name == 'pokec2':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(2, seed=args.seed)
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(2, seed=args.seed, local = args.local)
 # elif dataset_name == 'fair_pokec1': 
 #     dataset = 'region_job'
 #     sens_attr = "region"
