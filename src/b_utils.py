@@ -54,26 +54,6 @@ def load_pokec_renewed(dataset, seed, local, label_number=1000):  # 1000
         features = np.load('/home/joyce/dataset/pokec_BIND/region_job_' + str(dataset) + '_features.npy')
         labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_' + str(dataset) + '_labels.npy')
         sens = np.load('/home/joyce/dataset/pokec_BIND/region_job_' + str(dataset) + '_sens.npy')
-    # if dataset == 1:
-    #     # edges = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_edges.npy')
-    #     # features = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_features.npy')
-    #     # labels = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_labels.npy')
-    #     # sens = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_1_BIND_sens.npy')
-
-    #     edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_edges.npy')
-    #     features = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_features.npy')
-    #     labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_labels.npy')
-    #     sens = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_BIND_sens.npy')
-    # else:
-    #     # edges = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_edges.npy')
-    #     # features = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_features.npy')
-    #     # labels = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_labels.npy')
-    #     # sens = np.load('/Users/beep/Desktop/combinedPapers/dataset/pokec_BIND/region_job_2_2_sens.npy')
-
-    #     edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_edges.npy')
-    #     features = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_features.npy')
-    #     labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_labels.npy')
-    #     sens = np.load('/home/joyce/dataset/pokec_BIND/region_job_2_2_sens.npy')
 
     adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
                         shape=(labels.shape[0], labels.shape[0]),
@@ -232,7 +212,7 @@ def load_income(dataset, seed, local, sens_attr="race", predict_attr="income", p
 #     return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 
 
-def load_nba_parameters_fairGNN(dataset = "nba", sens_attr = "country",predict_attr = "SALARY", path = "dataset/nba/", label_number=100,sens_number=50,seed = 10,test_idx=True): 
+def load_nba_parameters_fairGNN(dataset, seed, local, sens_attr = "country", predict_attr = "SALARY", path = "dataset/nba/", label_number=100,sens_number=50,test_idx=True): 
     """Load data"""
     print('Loading {} dataset from {}'.format(dataset,path))
 
@@ -304,84 +284,6 @@ def load_nba_parameters_fairGNN(dataset = "nba", sens_attr = "country",predict_a
     # random.shuffle(sens_idx)
 # try sens or sens.to(torch.device('cuda'))
     return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
-
-def load_nba_try(dataset, sens_attr="country", predict_attr="SALARY", path="dataset/", label_number=1000):
-    print('Loading {} dataset from {}'.format(dataset,path))
-    idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
-    # print('idx_features_labels :', idx_features_labels)
-    header = list(idx_features_labels.columns)
-    header.remove("user_id")
-    header.remove(sens_attr)
-    header.remove(predict_attr)
-
-    # print('len(header) :', len(header)) #95
-
-    features = sp.csr_matrix(idx_features_labels[header], dtype=np.float32)
-    labels = idx_features_labels[predict_attr].values
-
-
-     #build graph
-    idx = np.array(idx_features_labels["user_id"], dtype=int)
-    idx_map = {j: i for i, j in enumerate(idx)}
-    edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
-
-    edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
-                     dtype=int).reshape(edges_unordered.shape)
-
-
-    adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
-                        shape=(labels.shape[0], labels.shape[0]),
-                        dtype=np.float32)
-
-    adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
-    
-    adj = adj + sp.eye(adj.shape[0])
-
-    features = torch.FloatTensor(np.array(features.todense()))
-    labels = torch.LongTensor(labels)
-
-    import random
-    random.seed(20)
-    # label_idx_0 = np.where(labels == 0)[0]
-    # label_idx_1 = np.where(labels == 1)[0]
-    # random.shuffle(label_idx_0)
-    # random.shuffle(label_idx_1)
-
-    label_idx = np.where(labels>=0)[0]
-    random.shuffle(label_idx)
-
-    # random.shuffle(label_idx)
-    idx_train = label_idx[:min(int(0.5 * len(label_idx)),label_number)]
-    idx_val = label_idx[int(0.5 * len(label_idx)):int(0.75 * len(label_idx))]
-    idx_test = label_idx[int(0.75 * len(label_idx)):]
-    # idx_val = label_idx[int(0.5 * len(label_idx)):int(0.75 * len(label_idx))]
-    # idx_train = np.append(label_idx_0[:min(int(0.5 * len(label_idx_0)), label_number // 2)],
-    #                       label_idx_1[:min(int(0.5 * len(label_idx_1)), label_number // 2)])
-    # idx_val = np.append(label_idx_0[int(0.5 * len(label_idx_0)):int(0.75 * len(label_idx_0))],
-    #                     label_idx_1[int(0.5 * len(label_idx_1)):int(0.75 * len(label_idx_1))])
-    # idx_test = np.append(label_idx_0[int(0.75 * len(label_idx_0)):], label_idx_1[int(0.75 * len(label_idx_1)):])
-
-    # sens = idx_features_labels[sens_attr].values.astype(int)
-    # sens = torch.FloatTensor(sens)
-    # idx_train = torch.LongTensor(idx_train)
-    # idx_val = torch.LongTensor(idx_val)
-    # idx_test = torch.LongTensor(idx_test)
-
-
-    sens = idx_features_labels[sens_attr].values
-    # print('sens: ', sens)
-    sens_idx = set(np.where(sens >= 0)[0])
-    idx_test = np.asarray(list(sens_idx & set(idx_test)))
-    sens = torch.FloatTensor(sens)
-    random.seed(20)
-
-
-    idx_train = torch.LongTensor(idx_train)
-    idx_val = torch.LongTensor(idx_val)
-    idx_test = torch.LongTensor(idx_test)
-
-    return adj, features, labels, idx_train,idx_val, idx_test, sens.to(torch.device('cuda'))
-
 
 def load_bail(dataset, seed, sens_attr="WHITE", predict_attr="RECID", path="dataset/bail/", label_number=1000):
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
