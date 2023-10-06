@@ -7,7 +7,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
-from src.b_utils import load_nba_try, load_bail, load_nba_parameters_fairGNN, load_pokec_renewed, load_pokec, load_income
+from src.b_utils import load_nba_try, load_bail, load_nba_parameters_fairGNN, load_pokec_renewed, load_income
 from src.gcn import GCN
 from scipy.stats import wasserstein_distance
 from tqdm import tqdm
