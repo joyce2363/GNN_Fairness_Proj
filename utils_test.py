@@ -86,7 +86,7 @@ def load_income(dataset, sens_attr="race", predict_attr="income", path="/home/jo
     idx_val = torch.LongTensor(idx_val)
     idx_test = torch.LongTensor(idx_test)
 
-    return adj, features, labels, idx_train, idx_val, idx_test, sens
+    return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 
 
 def load_pokec_renewed(dataset, label_number=1000):  # 1000
