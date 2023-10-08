@@ -38,7 +38,7 @@ def build_relationship(x, thresh=0.25):
     return idx_map
 
 
-def load_income(dataset, sens_attr="race", predict_attr="income", path="/home/joyce/dataset/", label_number=1000):  # 1000
+def load_income(dataset, sens_attr="race", predict_attr="income", path="/home/joyce/dataset/income/", label_number=1000):  # 1000
     print('Loading {} dataset from {}'.format(dataset, path))
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
     header = list(idx_features_labels.columns)
