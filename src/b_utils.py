@@ -85,7 +85,7 @@ def load_pokec_renewed(dataset, seed, local, label_number=1000):  # 1000
     return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 
 def load_income(dataset, seed, local, sens_attr="race", predict_attr="income", path="/home/joyce/dataset/income/", label_number=1000):  # 1000
-    # /Users/beep/Desktop/combinedPapers/dataset/pokec_fairGNN (path when not on server?)
+    # /Users/beep/Desktop/combinedPapers/dataset/income (path when not on server?)
     # /home/joyce/dataset/pokec_fairGNN (path for on docker container)
     # ../data/income/ (path when not on server)
     print('Loading {} dataset from {}'.format(dataset, path))
