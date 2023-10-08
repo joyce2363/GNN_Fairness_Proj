@@ -2,7 +2,7 @@ from __future__ import division
 from __future__ import print_function
 
 
-from implementations.approximator import wasserstein_cost_loss
+from approximator import wasserstein_cost_loss
 from numpy import *
 import scipy.sparse as sp
 from tqdm import tqdm
@@ -19,11 +19,10 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 from scipy.stats import wasserstein_distance
-from implementations.utils import load_bail, load_income, load_pokec_renewed
+from utils_test import load_bail, load_income, load_pokec_renewed
 import warnings
 warnings.filterwarnings('ignore')
-import ctypes
-ctypes.cdll.LoadLibrary('caffe2_nvrtc.dll')
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--no-cuda', action='store_true', default=False,
