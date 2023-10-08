@@ -113,7 +113,7 @@ def get_adj(dataset_name):
         adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
         return adj
 
-    path="../data/" + str(dataset_name) + "/"
+    path="/home/joyce/dataset/" + str(dataset_name) + "/"
     dataset = dataset_name
     print('Reconstructing the adj of {} dataset...'.format(dataset))
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
@@ -322,7 +322,7 @@ def tst():
     auc_roc_test = roc_auc_score(labels[idx_test].cpu().numpy(), output[idx_test].detach().cpu().numpy())
     f1_test = f1_score(labels[idx_test].cpu().numpy(), preds[idx_test].cpu().numpy())
     parity, equality = fair_metric(preds[idx_test].cpu().numpy(), labels[idx_test].cpu().numpy(),
-                                   sens[idx_test].numpy())
+                                   sens[idx_test].cpu().numpy())
 
     sp_records.append(parity)
     eo_records.append(equality)
