@@ -93,7 +93,7 @@ def get_adj(dataset_name):
         adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
         return adj
 
-    path="/Users/beep/Desktop/combinedPapers/dataset/" + str(dataset_name) + "/"
+    path="/home/joyce/dataset/" + str(dataset_name) + "/"
     dataset = dataset_name
     print('Reconstructing the adj of {} dataset...'.format(dataset))
 
