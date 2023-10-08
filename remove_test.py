@@ -41,7 +41,7 @@ parser.add_argument('--hidden', type=int, default=16,
                     help='Number of hidden units.')
 parser.add_argument('--dropout', type=float, default=0.5,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--helpfulness_collection', type=int, default=0,
+parser.add_argument('--helpfulness_collection', type=int, default=1,
                     help='do leave-one-out for helpful nodes.')
 
 args = parser.parse_args()
@@ -165,7 +165,7 @@ def del_adj(harmful, dataset_name):
         adj = adj + sp.eye(adj.shape[0])
         return adj
 
-    path="../data/" + str(dataset_name) + "/"
+    path="/home/joyce/dataset/" + str(dataset_name) + "/"
     dataset = dataset_name
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
     header = list(idx_features_labels.columns)
