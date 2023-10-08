@@ -66,7 +66,7 @@ if dataset_name == 'nba':
     norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
 elif dataset_name == 'income':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_income('income', seed = args.seed, local = args.local)
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_income('income')
     norm_features = feature_norm(features)
     norm_features[:, 8] = features[:, 8]
     features = feature_norm(features)
@@ -79,43 +79,6 @@ elif dataset_name == 'pokec1':
     adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(1, seed=args.seed, local = args.local)
 elif dataset_name == 'pokec2':
     adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(2, seed=args.seed, local = args.local)
-# elif dataset_name == 'fair_pokec1': 
-#     dataset = 'region_job'
-#     sens_attr = "region"
-#     predict_attr = "I_am_working_in_field"
-#     label_number = args.label_number
-#     sens_number = args.sens_number
-#     seed = args.seed
-#     path="/home/joyce/dataset/pokec_fairGNN"
-#      # /home/joyce/dataset/pokec_fairGNN (this is the path for running in docker container)
-#     test_idx=False
-#     adj, features, labels, idx_train, idx_val, idx_test,sens = load_pokec(dataset,
-#                                                                                     sens_attr,
-#                                                                                     predict_attr,
-#                                                                                     path=path,
-#                                                                                     label_number=label_number,
-#                                                                                     sens_number=sens_number,
-#                                                                                     seed=seed,test_idx=test_idx)
-# elif dataset_name == 'fair_pokec2': 
-#     dataset = 'region_job_2'
-#     print('dataset :', dataset)
-
-#     sens_attr = "region"
-#     predict_attr = "I_am_working_in_field"
-#     label_number = args.label_number
-#     sens_number = args.sens_number
-#     seed = args.seed
-#     path="/home/joyce/dataset/pokec_fairGNN"
-#      # /home/joyce/dataset/pokec_fairGNN (this is the path for running in docker container)
-#     test_idx=False
-#     adj, features, labels, idx_train, idx_val, idx_test,sens = load_pokec(dataset,
-#                                                                                     sens_attr,
-#                                                                                     predict_attr,
-#                                                                                     path=path,
-#                                                                                     label_number=label_number,
-#                                                                                     sens_number=sens_number,
-#                                                                                     seed=seed,test_idx=test_idx)
-
 
 edge_index = convert.from_scipy_sparse_matrix(adj)[0]
 print('edge_index: ', edge_index)

@@ -129,8 +129,7 @@ def load_income(dataset, seed, local, sens_attr="race", predict_attr="income", p
                         label_idx_1[int(0.5 * len(label_idx_1)):int(0.75 * len(label_idx_1))])
     idx_test = np.append(label_idx_0[int(0.75 * len(label_idx_0)):], label_idx_1[int(0.75 * len(label_idx_1)):])
 
-    # sens = idx_features_labels[sens_attr].values.astype(int)
-    sens = idx_features_labels[sens_attr].values
+    sens = idx_features_labels[sens_attr].values.astype(int)
     sens = torch.FloatTensor(sens)
     idx_train = torch.LongTensor(idx_train)
     idx_val = torch.LongTensor(idx_val)
@@ -212,7 +211,7 @@ def load_income(dataset, seed, local, sens_attr="race", predict_attr="income", p
 #     return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 
 
-def load_nba_parameters_fairGNN(dataset, seed, local, sens_attr = "country", predict_attr = "SALARY", path = "dataset/nba/", label_number=100,sens_number=50,test_idx=True): 
+def load_nba_parameters_fairGNN(dataset, seed, local, sens_attr = "country", predict_attr = "SALARY", label_number=100, sens_number=50, path = "dataset/nba/", test_idx=True): 
     """Load data"""
     print('Loading {} dataset from {}'.format(dataset,path))
 

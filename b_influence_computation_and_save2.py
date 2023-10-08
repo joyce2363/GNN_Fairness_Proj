@@ -57,6 +57,23 @@ def feature_norm(features):
     min_values = features.min(axis=0)[0]
     max_values = features.max(axis=0)[0]
     return 2*(features - min_values).div(max_values-min_values) - 1
+    
+def build_relationship(x, thresh=0.25):
+    df_euclid = pd.DataFrame(1 / (1 + distance_matrix(x.T.T, x.T.T)), columns=x.T.columns, index=x.T.columns)
+    df_euclid = df_euclid.to_numpy()
+    idx_map = []
+    for ind in range(df_euclid.shape[0]):
+        max_sim = np.sort(df_euclid[ind, :])[-2]
+        neig_id = np.where(df_euclid[ind, :] > thresh * max_sim)[0]
+        import random
+        random.seed(912)
+        random.shuffle(neig_id)
+        for neig in neig_id:
+            if neig != ind:
+                idx_map.append([ind, neig])
+    idx_map = np.array(idx_map)
+
+    return idx_map
 
 def get_adj(_name):
     predict_attr = "RECID"
@@ -64,8 +81,8 @@ def get_adj(_name):
         predict_attr="RECID"
     elif dataset_name == 'income':
         predict_attr = "income"
-    elif dataset_name == 'nba':
-        predict_attr = 'nba'
+    # elif dataset_name == 'nba':
+    #     predict_attr = 'nba'
     elif dataset_name == 'pokec1' or dataset_name == 'pokec2':
         if dataset_name == 'pokec1':
             edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_edges.npy')
