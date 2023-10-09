@@ -220,12 +220,6 @@ def load_nba_parameters_fairGNN(dataset, seed, local, sens_attr = "country", pre
     header.remove("user_id")
     edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
 
-    # if os.path.exists(f'{path}/{dataset}_edges.txt'):
-    #     edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
-    # else:
-    #     edges_unordered = build_relationship(idx_features_labels[header], thresh=0.7)
-    #     np.savetxt(f'{path}/{dataset}_edges.txt', edges_unordered)
-
     features = sp.csr_matrix(idx_features_labels[header], dtype=np.float32)
     labels = idx_features_labels[predict_attr].values
 
@@ -245,11 +239,13 @@ def load_nba_parameters_fairGNN(dataset, seed, local, sens_attr = "country", pre
 
     import random
     random.seed(20)
-    label_idx_0 = np.where(labels == 0)[0]
-    label_idx_1 = np.where(labels == 1)[0]
+    label_idx = np.where(labels>=0)[0]
+    random.shuffle(label_idx)
+    # label_idx_0 = np.where(labels == 0)[0]
+    # label_idx_1 = np.where(labels == 1)[0]
 
-    random.shuffle(label_idx_0)
-    random.shuffle(label_idx_1)
+    # random.shuffle(label_idx_0)
+    # random.shuffle(label_idx_1)
 
     idx_train = np.append(label_idx_0[:min(int(0.5 * len(label_idx_0)), label_number // 2)],
                           label_idx_1[:min(int(0.5 * len(label_idx_1)), label_number // 2)])
