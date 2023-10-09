@@ -213,7 +213,7 @@ def load_income(dataset, seed, local, sens_attr="race", predict_attr="income", p
 
 def load_nba_parameters_fairGNN(dataset, seed, local, sens_attr = "country", predict_attr = "SALARY", label_number=100, sens_number=50, path = "dataset/nba/", test_idx=True): 
     """Load data"""
-     print('Loading {} dataset from {}'.format(dataset, path))
+    print('Loading {} dataset from {}'.format(dataset, path))
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
     header = list(idx_features_labels.columns)
     header.remove(predict_attr)
