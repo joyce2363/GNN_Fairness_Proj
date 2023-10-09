@@ -105,7 +105,9 @@ def get_adj(_name):
     header.remove(predict_attr)
 
     if os.path.exists(f'{path}/{dataset}_edges.txt'):
-        edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
+        # edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
+        edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
+
     # else:
     #     edges_unordered = build_relationship(idx_features_labels[header], thresh=0.6)
     #     np.savetxt(f'{path}/{dataset}_edges.txt', edges_unordered)
