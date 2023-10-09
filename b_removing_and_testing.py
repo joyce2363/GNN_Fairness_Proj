@@ -124,7 +124,7 @@ def get_adj(dataset_name):
     if dataset == 'nba': 
         if os.path.exists(f'{path}/{dataset}_edges.txt'):
             edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
-    else: 
+    # else: 
         # if os.path.exists(f'{path}/{dataset}_edges.txt'):
         #     edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
         # else:
