@@ -121,16 +121,23 @@ def get_adj(dataset_name):
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
     header = list(idx_features_labels.columns)
     header.remove(predict_attr)
-    if os.path.exists(f'{path}/{dataset}_edges.txt'):
-        edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
-    else:
-        edges_unordered = build_relationship(idx_features_labels[header], thresh=0.6)
-        np.savetxt(f'{path}/{dataset}_edges.txt', edges_unordered)
+    if dataset == 'nba': 
+        if os.path.exists(f'{path}/{dataset}_edges.txt'):
+            edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
+    else: 
+        if os.path.exists(f'{path}/{dataset}_edges.txt'):
+            edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
+        else:
+            edges_unordered = build_relationship(idx_features_labels[header], thresh=0.6)
+            np.savetxt(f'{path}/{dataset}_edges.txt', edges_unordered)
 
     features = sp.csr_matrix(idx_features_labels[header], dtype=np.float32)
     labels = idx_features_labels[predict_attr].values
     print("testing labels:", len(labels))
-    idx = np.arange(features.shape[0])
+    if dataset_name == 'nba':
+        idx = np.array(idx_features_labels["user_id"], dtype=int) #nba
+    else: 
+        idx = np.arange(features.shape[0])
     idx_map = {j: i for i, j in enumerate(idx)}
     edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
                      dtype=int).reshape(edges_unordered.shape)
