@@ -156,7 +156,7 @@ def del_adj(harmful, dataset_name):
     elif dataset_name == 'income':
         predict_attr = "income"
     elif dataset_name == 'nba':
-        predict_attr == 'SALARY'
+        predict_attr = 'SALARY'
     elif dataset_name == 'pokec1' or dataset_name == 'pokec2':
         if dataset_name == 'pokec1':
             edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_edges.npy')
