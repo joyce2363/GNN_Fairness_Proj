@@ -76,7 +76,6 @@ def build_relationship(x, thresh=0.25):
     return idx_map
 
 def get_adj(_name):
-    predict_attr = "RECID"
     if dataset_name == 'bail':
         predict_attr="RECID"
     elif dataset_name == 'income':
@@ -107,9 +106,9 @@ def get_adj(_name):
 
     if os.path.exists(f'{path}/{dataset}_edges.txt'):
         edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
-    else:
-        edges_unordered = build_relationship(idx_features_labels[header], thresh=0.6)
-        np.savetxt(f'{path}/{dataset}_edges.txt', edges_unordered)
+    # else:
+    #     edges_unordered = build_relationship(idx_features_labels[header], thresh=0.6)
+    #     np.savetxt(f'{path}/{dataset}_edges.txt', edges_unordered)
 
     features = sp.csr_matrix(idx_features_labels[header], dtype=np.float32)
     labels = idx_features_labels[predict_attr].values
@@ -145,9 +144,9 @@ if dataset_name == 'bail':
 elif dataset_name == 'nba': 
     model = torch.load('gcn_' + dataset_name + '.pth')
     adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_nba_parameters_fairGNN('nba', seed = args.seed, local=args.local)
-    norm_features = feature_norm(features_vanilla)
-    norm_features[:, 0] = features_vanilla[:, 0]
-    features_vanilla = norm_features
+    # norm_features = feature_norm(features_vanilla)
+    # norm_features[:, 0] = features_vanilla[:, 0]
+    # features_vanilla = norm_features
 elif dataset_name == 'income': 
     model = torch.load('gcn_' + dataset_name + '.pth')
     adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_income('income', seed = args.seed, local=args.local)
