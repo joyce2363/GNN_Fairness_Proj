@@ -123,13 +123,13 @@ def get_adj(dataset_name):
     header.remove(predict_attr)
     if dataset == 'nba': 
         if os.path.exists(f'{path}/{dataset}_edges.txt'):
-            edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
-    else: 
-        if os.path.exists(f'{path}/{dataset}_edges.txt'):
             edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
-        else:
-            edges_unordered = build_relationship(idx_features_labels[header], thresh=0.6)
-            np.savetxt(f'{path}/{dataset}_edges.txt', edges_unordered)
+    else: 
+        # if os.path.exists(f'{path}/{dataset}_edges.txt'):
+        #     edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
+        # else:
+        #     edges_unordered = build_relationship(idx_features_labels[header], thresh=0.6)
+        #     np.savetxt(f'{path}/{dataset}_edges.txt', edges_unordered)
 
     features = sp.csr_matrix(idx_features_labels[header], dtype=np.float32)
     labels = idx_features_labels[predict_attr].values
