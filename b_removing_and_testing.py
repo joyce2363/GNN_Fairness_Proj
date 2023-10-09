@@ -95,12 +95,12 @@ def sparse_mx_to_torch_sparse_tensor(sparse_mx):
     return torch.sparse.FloatTensor(indices, values, shape)
 
 def get_adj(dataset_name):
-    predict_attr = "RECID"
     if dataset_name == 'bail':
         predict_attr="RECID"
     elif dataset_name == 'income':
         predict_attr = "income"
-
+    if dataset_name == 'nba':
+        predict_attr="SALARY"
     if dataset_name == 'pokec1' or dataset_name == 'pokec2':
         if dataset_name == 'pokec1':
             edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_edges.npy')
