@@ -104,8 +104,8 @@ def get_adj(_name):
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
     header = list(idx_features_labels.columns)
     header.remove(predict_attr)
-    header.remove(sens_attr) # for nba
-    header.remove(predict_attr) # for nba
+    # header.remove(sens_attr) # for nba
+    # header.remove(predict_attr) # for nba
     if os.path.exists(f'{path}/{dataset}_edges.txt'):
         edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
     else:
@@ -116,8 +116,7 @@ def get_adj(_name):
     labels = idx_features_labels[predict_attr].values
 
     # idx = np.arange(features.shape[0])
-    idx_map = {j: i for i, j in enumerate(idx)}
-
+    
     idx_map = {j: i for i, j in enumerate(idx)}
     edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
                      dtype=int).reshape(edges_unordered.shape)
