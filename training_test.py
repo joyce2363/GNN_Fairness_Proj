@@ -7,7 +7,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
-from utils_test import load_bail, load_income, load_pokec_renewed
+from utils_test import load_bail, load_income, load_pokec_renewed, load_nba
 from src.gcn import GCN
 from scipy.stats import wasserstein_distance
 from tqdm import tqdm
@@ -51,6 +51,11 @@ if dataset_name == 'income':
     adj, features, labels, idx_train, idx_val, idx_test, sens = load_income('income')
     norm_features = feature_norm(features)
     norm_features[:, 8] = features[:, 8]
+    features = feature_norm(features)
+elif dataset_name == 'nba': 
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba('nba')
+    norm_features = feature_norm(features)
+    norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
 
 edge_index = convert.from_scipy_sparse_matrix(adj)[0]

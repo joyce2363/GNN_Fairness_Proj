@@ -89,6 +89,68 @@ def load_income(dataset, sens_attr="race", predict_attr="income", path="/home/jo
     return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 
 
+def load_nba(dataset, sens_attr = "country", predict_attr = "SALARY", label_number=100, sens_number=50, path = "dataset/nba/", test_idx=True): 
+    print('Loading {} dataset from {}'.format(dataset, path))
+    idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
+    header = list(idx_features_labels.columns)
+    header.remove("user_id")
+    header.remove(sens_attr)
+    header.remove(predict_attr)
+
+    edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
+
+    features = sp.csr_matrix(idx_features_labels[header], dtype=np.float32)
+    labels = idx_features_labels[predict_attr].values
+    idx = np.array(idx_features_labels["user_id"], dtype=int)
+
+    # idx = np.arange(features.shape[0])
+    idx_map = {j: i for i, j in enumerate(idx)}
+    edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
+                     dtype=int).reshape(edges_unordered.shape)
+    adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
+                        shape=(labels.shape[0], labels.shape[0]),
+                        dtype=np.float32)
+
+    adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
+    adj = adj + sp.eye(adj.shape[0])
+
+    features = torch.FloatTensor(np.array(features.todense()))
+    labels = torch.LongTensor(labels)
+
+    import random
+    random.seed(20)
+    label_idx = np.where(labels>=0)[0]
+    random.shuffle(label_idx)
+
+    idx_train = label_idx[:min(int(0.5 * len(label_idx)),label_number)]
+    idx_val = label_idx[int(0.5 * len(label_idx)):int(0.75 * len(label_idx))]
+    if test_idx:
+        idx_test = label_idx[label_number:]
+        idx_val = idx_test
+    else:
+        idx_test = label_idx[int(0.75 * len(label_idx)):]
+
+
+
+
+    sens = idx_features_labels[sens_attr].values
+
+    sens_idx = set(np.where(sens >= 0)[0])
+    idx_test = np.asarray(list(sens_idx & set(idx_test)))
+    sens = torch.FloatTensor(sens)
+    idx_sens_train = list(sens_idx - set(idx_val) - set(idx_test))
+    random.seed(20)
+    random.shuffle(idx_sens_train)
+    idx_sens_train = torch.LongTensor(idx_sens_train[:sens_number])
+
+
+    idx_train = torch.LongTensor(idx_train)
+    idx_val = torch.LongTensor(idx_val)
+    idx_test = torch.LongTensor(idx_test)
+
+    return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
+
+
 def load_pokec_renewed(dataset, label_number=1000):  # 1000
 
     if dataset == 1:
