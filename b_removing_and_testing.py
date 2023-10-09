@@ -139,6 +139,8 @@ def get_adj(dataset_name):
     else: 
         idx = np.arange(features.shape[0])
     idx_map = {j: i for i, j in enumerate(idx)}
+    edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
+
     edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
                      dtype=int).reshape(edges_unordered.shape)
     adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
@@ -149,14 +151,13 @@ def get_adj(dataset_name):
     return adj
 
 def del_adj(harmful, dataset_name):
-    predict_attr = "RECID"
-
     if dataset_name == 'bail':
         predict_attr="RECID"
     elif dataset_name == 'income':
         predict_attr = "income"
-
-    if dataset_name == 'pokec1' or dataset_name == 'pokec2':
+    elif dataset_name == 'nba':
+        predict_attr == 'SALARY'
+    elif dataset_name == 'pokec1' or dataset_name == 'pokec2':
         if dataset_name == 'pokec1':
             edges = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_edges.npy')
             labels = np.load('/home/joyce/dataset/pokec_BIND/region_job_1_labels.npy')
