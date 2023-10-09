@@ -241,20 +241,29 @@ def load_nba_parameters_fairGNN(dataset, seed, local, sens_attr = "country", pre
     random.seed(20)
     label_idx = np.where(labels>=0)[0]
     random.shuffle(label_idx)
-    # label_idx_0 = np.where(labels == 0)[0]
-    # label_idx_1 = np.where(labels == 1)[0]
+    
+    idx_train = label_idx[:min(int(0.5 * len(label_idx)),label_number)]
+    idx_val = label_idx[int(0.5 * len(label_idx)):int(0.75 * len(label_idx))]
+    if test_idx:
+        idx_test = label_idx[label_number:]
+        idx_val = idx_test
+    else:
+        idx_test = label_idx[int(0.75 * len(label_idx)):]
 
-    # random.shuffle(label_idx_0)
-    # random.shuffle(label_idx_1)
 
-    idx_train = np.append(label_idx_0[:min(int(0.5 * len(label_idx_0)), label_number // 2)],
-                          label_idx_1[:min(int(0.5 * len(label_idx_1)), label_number // 2)])
-    idx_val = np.append(label_idx_0[int(0.5 * len(label_idx_0)):int(0.75 * len(label_idx_0))],
-                        label_idx_1[int(0.5 * len(label_idx_1)):int(0.75 * len(label_idx_1))])
-    idx_test = np.append(label_idx_0[int(0.75 * len(label_idx_0)):], label_idx_1[int(0.75 * len(label_idx_1)):])
 
-    sens = idx_features_labels[sens_attr].values.astype(int)
+
+    sens = idx_features_labels[sens_attr].values
+
+    sens_idx = set(np.where(sens >= 0)[0])
+    idx_test = np.asarray(list(sens_idx & set(idx_test)))
     sens = torch.FloatTensor(sens)
+    idx_sens_train = list(sens_idx - set(idx_val) - set(idx_test))
+    random.seed(seed)
+    random.shuffle(idx_sens_train)
+    idx_sens_train = torch.LongTensor(idx_sens_train[:sens_number])
+
+
     idx_train = torch.LongTensor(idx_train)
     idx_val = torch.LongTensor(idx_val)
     idx_test = torch.LongTensor(idx_test)
