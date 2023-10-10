@@ -110,7 +110,8 @@ elif args.dataset == 'pokec_n':
     test_idx=False
 
 if args.docker == True: 
-    path = "home/joyce/dataset/" + 'pokec_fairGNN' + '/' + str(dataset)
+    path = "home/joyce/dataset/" + 'pokec_fairGNN' + '/' 
+    # + str(dataset)
 else: 
     path = 'dataset/' + 'pokec_fairGNN' + '/'
 
