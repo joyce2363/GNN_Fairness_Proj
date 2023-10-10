@@ -66,6 +66,7 @@ parser.add_argument('--sens_number', type=int, default=200,
                     help="the number of sensitive attributes")
 parser.add_argument('--label_number', type=int, default=500,
                     help="the number of labels")
+parser.add_argument('--docker', type=int, default=0)
 
 args = parser.parse_known_args()[0]
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -86,7 +87,7 @@ if args.dataset == 'nba':
     label_number = 100
     sens_number = 50
     seed = 20
-    path = "dataset/nba/"
+    # path = "dataset/nba/"
     # path = "home/joyce/dataset/" #docker
     test_idx = True
 elif args.dataset == 'pokec_z':
@@ -96,7 +97,7 @@ elif args.dataset == 'pokec_z':
     label_number = args.label_number
     sens_number = args.sens_number
     seed = 20
-    path="dataset/pokec/"
+    # path="dataset/pokec/"
     test_idx=False
 elif args.dataset == 'pokec_n':
     dataset = 'region_job_2'
@@ -105,8 +106,13 @@ elif args.dataset == 'pokec_n':
     label_number = args.label_number
     sens_number = args.sens_number
     seed = 20
-    path='home/joyce/dataset/pokec'
+    # path='home/joyce/dataset/pokec'
     test_idx=False
+
+if args.docker == True: 
+    path = "home/joyce/dataset/" + 'pokec_fairGNN' + '/'
+else: 
+    path = 'dataset/' + 'pokec_fairGNN' + '/'
 
 print(dataset)
 
