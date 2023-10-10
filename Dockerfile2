@@ -1,3 +1,8 @@
+FROM python:3.7.5-slim
+RUN python -m pip install \
+    parse \
+    realpython-reader
+
 ADD file:603693e48cdc7f0c5c62119923aadbb266e5df5a5002fc0f61295858f91690e8 in / 
 
 pip install dgl-cu100==0.4.3
