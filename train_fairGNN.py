@@ -87,6 +87,7 @@ if args.dataset == 'nba':
     sens_number = 50
     seed = 20
     path = "dataset/nba/"
+    # path = "home/joyce/dataset/" #docker
     test_idx = True
 elif args.dataset == 'pokec_z':
     dataset = 'region_job'
@@ -104,7 +105,7 @@ elif args.dataset == 'pokec_n':
     label_number = args.label_number
     sens_number = args.sens_number
     seed = 20
-    path="dataset/pokec/"
+    path='home/joyce/dataset/pokec'
     test_idx=False
 
 print(dataset)
