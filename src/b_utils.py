@@ -287,6 +287,9 @@ def load_nba_parameters_fairGNN(dataset, seed, local, sens_attr = "country", pre
     idx_train = torch.LongTensor(idx_train)
     idx_val = torch.LongTensor(idx_val)
     idx_test = torch.LongTensor(idx_test)
+    print('IDX_TRAIN: ', idx_train)
+    print('IDX_VAL: ', idx_val)
+    print('IDX_TEST:', idx_test)
 
     return adj, features, labels, idx_train, idx_val, idx_test, sens.to(torch.device('cuda'))
 
