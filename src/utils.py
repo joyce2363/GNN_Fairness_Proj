@@ -32,7 +32,7 @@ def load_pokec(dataset,sens_attr,predict_attr, path="dataset/pokec/", label_numb
     # build graph
     idx = np.array(idx_features_labels["user_id"], dtype=int)
     idx_map = {j: i for i, j in enumerate(idx)}
-    edges_unordered = np.genfromtxt(os.path.join(path,"{}_relationship.txt".format(dataset)), dtype=int)
+    edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
 
     edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
                      dtype=int).reshape(edges_unordered.shape)
