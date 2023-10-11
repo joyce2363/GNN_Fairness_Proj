@@ -1,6 +1,6 @@
 from __future__ import division
 from __future__ import print_function
-from torch_geometric.utils import convert
+# from torch_geometric.utils import convert
 import time
 # import argparse
 import numpy as np
@@ -22,8 +22,8 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
-parser.add_argument('--dataset', type=str, default="pokec2", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
-parser.add_argument('--seed', type=int, default= 10, help='Random seed.')
+parser.add_argument('--dataset', type=str, default="nba", help='One dataset from income, bail, pokec1, pokec2, fair_pokec1, fair_pokec2')
+parser.add_argument('--seed', type=int, default= 1, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=1000,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.001,
@@ -41,17 +41,12 @@ parser.add_argument('--label_number', type=int, default=500,
 parser.add_argument('--local', type=int, default=False,
                     help="run on docker or local")
 args = parser.parse_args()
-# if args.seed: 
-#     print("using seed: ", args.seed)
 if args.dataset:
     dataset_name = args.dataset
     print("using dataset: ", args.dataset)
 
 args.cuda = not args.no_cuda and torch.cuda.is_available()
-# np.random.seed(args.seed)
-# torch.manual_seed(args.seed)
 if args.cuda:
-    # torch.cuda.manual_seed(args.seed)
     print("works")
 
 def feature_norm(features):

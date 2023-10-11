@@ -16,7 +16,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
-parser.add_argument('--seed', type=int, default=42, help='Random seed.')
+parser.add_argument('--seed', type=int, default=1, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=2000,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.001,
@@ -80,7 +80,7 @@ if args.dataset != 'nba':
     label_number = args.label_number
     sens_number = args.sens_number
     seed = 20
-    path="/home/dataset/pokec_fairGNN"
+    path="../combinedPapers/dataset/pokec_fairGNN"
     test_idx=False
 else:
     dataset = 'nba'
@@ -89,10 +89,9 @@ else:
     label_number = 100
     sens_number = 50
     seed = 20
-    path = "/home/dataset/nba"
+    path = "../combinedPapers/dataset/nba"
     test_idx = True
 print(dataset)
-
 adj, features, labels, idx_train, idx_val, idx_test,sens,idx_sens_train = load_pokec(dataset,
                                                                                     sens_attr,
                                                                                     predict_attr,
@@ -130,7 +129,7 @@ if sens_attr:
 # Model and optimizer
 
 model = FairGNN(nfeat = features.shape[1], args = args)
-model.estimator.load_state_dict(torch.load("/home/src/checkpoint/GCN_sens_{}_ns_{}".format(dataset,sens_number)))
+model.estimator.load_state_dict(torch.load("../combinedPapers/src/checkpoint/GCN_sens_{}_ns_{}".format(dataset,sens_number)))
 if args.cuda:
     model.cuda()
     features = features.cuda()
@@ -201,6 +200,7 @@ print("Total time elapsed: {:.4f}s".format(time.time() - t_total))
 
 print('============performace on test set=============')
 if len(best_result) > 0:
+    print("best result: ", best_result)
     print("Test:",
             "accuracy: {:.4f}".format(best_result['acc']),
             "roc: {:.4f}".format(best_result['roc']),

@@ -13,10 +13,10 @@ def encode_onehot(labels):
                              dtype=np.int32)
     return labels_onehot
 
-def load_pokec(dataset,sens_attr,predict_attr, path="dataset/pokec/", label_number=1000,sens_number=500,seed=19,test_idx=False):
+def load_pokec(dataset,sens_attr,predict_attr, path="empty", label_number=1000,sens_number=500,seed=19,test_idx=False):
     """Load data"""
     print('Loading {} dataset from {}'.format(dataset,path))
-
+    print('running')
     idx_features_labels = pd.read_csv(os.path.join(path,"{}.csv".format(dataset)))
     header = list(idx_features_labels.columns)
     header.remove("user_id")
@@ -31,8 +31,9 @@ def load_pokec(dataset,sens_attr,predict_attr, path="dataset/pokec/", label_numb
 
     # build graph
     idx = np.array(idx_features_labels["user_id"], dtype=int)
+    print("idx / building graph")
     idx_map = {j: i for i, j in enumerate(idx)}
-    edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
+    edges_unordered = np.genfromtxt(os.path.join(path,"{}_relationship.txt".format(dataset)), dtype=int)
 
     edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
                      dtype=int).reshape(edges_unordered.shape)
@@ -88,7 +89,7 @@ def load_pokec(dataset,sens_attr,predict_attr, path="dataset/pokec/", label_numb
 def load_nba(dataset,sens_attr,predict_attr, path, label_number=1000,sens_number=500,seed=19,test_idx=False):
     """Load data"""
     print('Loading {} dataset from {}'.format(dataset,path))
-
+    print("running")
     idx_features_labels = pd.read_csv(os.path.join(path,"{}.csv".format(dataset)))
     header = list(idx_features_labels.columns)
     header.remove("user_id")
@@ -104,7 +105,7 @@ def load_nba(dataset,sens_attr,predict_attr, path, label_number=1000,sens_number
     # build graph
     idx = np.array(idx_features_labels["user_id"], dtype=int)
     idx_map = {j: i for i, j in enumerate(idx)}
-    edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
+    edges_unordered = np.genfromtxt(os.path.join(path,"{}_relationship.txt".format(dataset)), dtype=int)
 
     edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
                      dtype=int).reshape(edges_unordered.shape)
