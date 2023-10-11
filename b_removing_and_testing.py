@@ -294,6 +294,7 @@ def fair_metric(pred, labels, sens):
 
 
 def train(epoch):
+    print('EPOCH: ', epoch)
     t = time.time()
     print('HERE')
     model.train()
@@ -323,7 +324,7 @@ def train(epoch):
 
 
 def tst():
-    print("AYE")
+    # print("AYE")
     model.eval()
     output = model(features, edge_index)
     preds = (output.squeeze() > 0).type_as(labels)
