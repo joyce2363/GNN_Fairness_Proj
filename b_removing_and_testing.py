@@ -55,7 +55,7 @@ dataset_name = args.dataset
 seed = args.seed
 open_factor = args.helpfulness_collection
 print(open_factor)
-
+print('BLAH BLAH')
 def accuracy_new(output, labels):
     correct = output.eq(labels).double()
     correct = correct.sum()
@@ -121,9 +121,9 @@ def get_adj(dataset_name):
     idx_features_labels = pd.read_csv(os.path.join(path, "{}.csv".format(dataset)))
     header = list(idx_features_labels.columns)
     header.remove(predict_attr)
-    if dataset == 'nba': 
-        if os.path.exists(f'{path}/{dataset}_edges.txt'):
-            edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
+    # if dataset == 'nba': 
+    edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
+    print('EDGES_UNORDERED EXIST', edges_unordered)
     # else: 
         # if os.path.exists(f'{path}/{dataset}_edges.txt'):
         #     edges_unordered = np.genfromtxt(f'{path}/{dataset}_edges.txt').astype('int')
@@ -133,14 +133,11 @@ def get_adj(dataset_name):
 
     features = sp.csr_matrix(idx_features_labels[header], dtype=np.float32)
     labels = idx_features_labels[predict_attr].values
-    print("testing labels:", len(labels))
     if dataset_name == 'nba':
         idx = np.array(idx_features_labels["user_id"], dtype=int) #nba
     else: 
         idx = np.arange(features.shape[0])
     idx_map = {j: i for i, j in enumerate(idx)}
-    edges_unordered = np.genfromtxt(os.path.join(path,"{}_edges.txt".format(dataset)), dtype=int)
-
     edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
                      dtype=int).reshape(edges_unordered.shape)
     adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
@@ -234,8 +231,8 @@ elif dataset_name == 'income':
 elif dataset_name == 'nba': 
     adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN('nba', seed = args.seed, local = args.local)
     norm_features = feature_norm(features)
-    norm_features[:, 0] = features[:, 0]
-    features = feature_norm(features)
+    # norm_features[:, 0] = features[:, 0]
+    # features = feature_norm(features)
 elif dataset_name == 'pokec1':
     adj, features, labels, idx_train, idx_val, idx_test, sens = load_pokec_renewed(1, seed = args.seed, local = args.local)
 elif dataset_name == 'pokec2':
@@ -248,6 +245,7 @@ hop = 1
 print("Finding neighbors ... ")
 G = nx.Graph(the_adj)
 for i in tqdm(range(idx_train.shape[0])):
+    print('NEIGHTBORS')
     neighbors = find123Nei(G, idx_train[i].item())
     mid = []
     for j in range(hop):
@@ -297,6 +295,7 @@ def fair_metric(pred, labels, sens):
 
 def train(epoch):
     t = time.time()
+    print('HERE')
     model.train()
     optimizer.zero_grad()
     output = model(features, edge_index)
@@ -324,6 +323,7 @@ def train(epoch):
 
 
 def tst():
+    print("AYE")
     model.eval()
     output = model(features, edge_index)
     preds = (output.squeeze() > 0).type_as(labels)
