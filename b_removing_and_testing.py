@@ -293,7 +293,7 @@ def fair_metric(pred, labels, sens):
     return parity.item(), equality.item()
 
 
-def train(epoch):
+def train(1000):
     print('EPOCH: ', epoch)
     t = time.time()
     print('HERE')
