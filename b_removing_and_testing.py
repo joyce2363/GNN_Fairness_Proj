@@ -245,14 +245,14 @@ hop = 1
 print("Finding neighbors ... ")
 G = nx.Graph(the_adj)
 for i in tqdm(range(idx_train.shape[0])):
-    print('NEIGHTBORS')
+    # print('NEIGHTBORS')
     neighbors = find123Nei(G, idx_train[i].item())
     mid = []
     for j in range(hop):
         mid += neighbors[j]
     mid = list(set(mid).intersection(set(idx_train.numpy().tolist()))) + [idx_train[i].item()]
-    print("DELETED computation_graph_involving")
-    # computation_graph_involving.append(mid)
+    # print("DELETED computation_graph_involving")
+    computation_graph_involving.append(mid)
 
 final_influence = np.load('final_influence_' + dataset_name + '.npy', allow_pickle=True)
 helpful = idx_train[np.argsort(final_influence).copy()].tolist()
@@ -274,7 +274,8 @@ for i in range(len(harmful) - 1):
 
 harmful_idx = np.array(harmful_idx)[masker].tolist()
 harmful = idx_train[harmful_idx].tolist()
-
+print('HARMFUL_idx::::' harmful_idx)
+print('final_influence[harmful_idx]': final_influence[harmful_idx])
 max_num = 0
 for i in range(len(final_influence[harmful_idx]) - 1):
     if final_influence[harmful_idx][i] * final_influence[harmful_idx][i+1] <= 0:
