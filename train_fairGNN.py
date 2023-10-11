@@ -103,7 +103,7 @@ adj, features, labels, idx_train, idx_val, idx_test,sens,idx_sens_train = load_p
 print(len(idx_test))
 #%%
 import dgl
-from utils import feature_norm
+from src.utils import feature_norm
 G = dgl.DGLGraph()
 G.from_scipy_sparse_matrix(adj)
 if dataset == 'nba':
