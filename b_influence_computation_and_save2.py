@@ -96,7 +96,7 @@ def get_adj(_name):
         adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
         return adj
 
-    path="/Users/beep/Desktop/combinedPapers/dataset" + str(dataset_name)
+    path="/home/dataset/" + str(dataset_name)
     dataset = dataset_name
     print('Reconstructing the adj of {} dataset...'.format(dataset))
 
@@ -145,11 +145,8 @@ if dataset_name == 'bail':
     norm_features[:, 0] = features_vanilla[:, 0]
     features_vanilla = norm_features
 elif dataset_name == 'nba': 
-    model = torch.load('gcn_' + dataset_name + '.pth')
+    model = torch.load('gcn_' + 'nba' + '.pth')
     adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_nba_parameters_fairGNN('nba', seed = args.seed, local=args.local)
-    # norm_features = feature_norm(features_vanilla)
-    # norm_features[:, 0] = features_vanilla[:, 0]
-    # features_vanilla = norm_features
 elif dataset_name == 'income': 
     model = torch.load('gcn_' + dataset_name + '.pth')
     adj_vanilla, features_vanilla, labels_vanilla, idx_train_vanilla, idx_val_vanilla, idx_test_vanilla, sens_vanilla = load_income('income', seed = args.seed, local=args.local)
