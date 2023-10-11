@@ -130,7 +130,7 @@ if sens_attr:
 # Model and optimizer
 
 model = FairGNN(nfeat = features.shape[1], args = args)
-model.estimator.load_state_dict(torch.load("./checkpoint/GCN_sens_{}_ns_{}".format(dataset,sens_number)))
+model.estimator.load_state_dict(torch.load("/home/src/checkpoint/GCN_sens_{}_ns_{}".format(dataset,sens_number)))
 if args.cuda:
     model.cuda()
     features = features.cuda()
