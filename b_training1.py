@@ -1,6 +1,6 @@
 from __future__ import division
 from __future__ import print_function
-# from torch_geometric.utils import convert
+from torch_geometric.utils import convert
 import time
 # import argparse
 import numpy as np
