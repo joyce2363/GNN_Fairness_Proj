@@ -274,8 +274,8 @@ for i in range(len(harmful) - 1):
 
 harmful_idx = np.array(harmful_idx)[masker].tolist()
 harmful = idx_train[harmful_idx].tolist()
-print('HARMFUL_idx::::' harmful_idx)
-print('final_influence[harmful_idx]': final_influence[harmful_idx])
+print('HARMFUL_idx::::', harmful_idx)
+print('final_influence[harmful_idx]:', final_influence[harmful_idx])
 max_num = 0
 for i in range(len(final_influence[harmful_idx]) - 1):
     if final_influence[harmful_idx][i] * final_influence[harmful_idx][i+1] <= 0:
