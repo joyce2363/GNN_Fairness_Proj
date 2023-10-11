@@ -251,7 +251,8 @@ for i in tqdm(range(idx_train.shape[0])):
     for j in range(hop):
         mid += neighbors[j]
     mid = list(set(mid).intersection(set(idx_train.numpy().tolist()))) + [idx_train[i].item()]
-    computation_graph_involving.append(mid)
+    print("DELETED computation_graph_involving")
+    # computation_graph_involving.append(mid)
 
 final_influence = np.load('final_influence_' + dataset_name + '.npy', allow_pickle=True)
 helpful = idx_train[np.argsort(final_influence).copy()].tolist()

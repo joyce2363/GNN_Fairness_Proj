@@ -26,7 +26,7 @@ parser.add_argument('--hidden', type=int, default=128,
                     help='Number of hidden units.')
 parser.add_argument('--dropout', type=float, default=0.5,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--sens_number', type=int, default=200,
+parser.add_argument('--sens_number', type=int, default=30,
                     help="the number of sensitive attributes")
 parser.add_argument('--dataset', type=str, default='pokec_z',
                     choices=['pokec_z','pokec_n','nba'])
