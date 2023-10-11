@@ -31,7 +31,7 @@ parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
 parser.add_argument('--dataset', type=str, default="bail", help='One dataset from income, bail, pokec1, and pokec2.')
 parser.add_argument('--seed', type=int, default= 10, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=30,
+parser.add_argument('--epochs', type=int, default=300,
                     help='Number of epochs to continue training for estimation evaluation.')
 parser.add_argument('--lr', type=float, default=0.01,
                     help='Initial learning rate.')
@@ -293,7 +293,7 @@ def fair_metric(pred, labels, sens):
     return parity.item(), equality.item()
 
 
-def train(1000):
+def train(epoch):
     print('EPOCH: ', epoch)
     t = time.time()
     print('HERE')
