@@ -42,7 +42,7 @@ parser.add_argument('--beta', type=float, default=0.01,
                     help='The hyperparameter of beta')
 parser.add_argument('--model', type=str, default="GAT",
                     help='the type of model GCN/GAT')
-parser.add_argument('--dataset', type=str, default='pokec_z', choices=['pokec_z','pokec_n','nba', 'bail'])
+parser.add_argument('--dataset', type=str, default='nba', choices=['pokec_z','pokec_n','nba', 'bail'])
 # , help='One dataset from income, bail, pokec1, and pokec2.')
 parser.add_argument('--num-hidden', type=int, default=64,
                     help='Number of hidden units of classifier.')
