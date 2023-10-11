@@ -221,6 +221,9 @@ final_influence = []
 for i in range(len(non_iid_influence)):
     ref = [idx_train_vanilla.numpy().tolist().index(item) for item in (computation_graph_involving[i] + [idx_train_vanilla[i]])]
     final_influence.append(non_iid_influence[i] - np.array(influence)[ref].sum())
+    print(ref)
+    print('CHECKING FINAL INFLUENCE: ', final_influence.append(non_iid_influence[i] - np.array(influence)[ref].sum())
+) 
 
 time4 = time.time()
 print("Average time per training node:", (time4 - time1)/1000, "s")
