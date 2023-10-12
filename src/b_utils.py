@@ -245,7 +245,8 @@ def load_nba_parameters_fairGNN(dataset, seed, local, sens_attr = "country", pre
     # print('FEATURES: ', features)
     labels = idx_features_labels[predict_attr].values
     # idx = np.arange(features.shape[0])
-    idx = np.array(idx_features_labels["user_id"], dtype=int)
+    # idx = np.array(idx_features_labels["user_id"], dtype=int)
+    idx = np.arange(features.shape[0])
     # print("idx differences: ", idx)
     idx_map = {j: i for i, j in enumerate(idx)}
     # print('EDGES_unordered', edges_unordered.shape)
