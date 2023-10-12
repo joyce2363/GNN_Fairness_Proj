@@ -55,8 +55,8 @@ def feature_norm(features):
     return 2*(features - min_values).div(max_values-min_values) - 1
 print("loading: ", dataset_name)
 
-if dataset_name == 'nba':
-    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN('nba', seed = args.seed, local = args.local)
+if dataset_name == 'nba' or dataset_name == 'nba-2':
+    adj, features, labels, idx_train, idx_val, idx_test, sens = load_nba_parameters_fairGNN(str(dataset_name), seed = args.seed, local = args.local)
     norm_features = feature_norm(features)
     norm_features[:, 0] = features[:, 0]
     features = feature_norm(features)
